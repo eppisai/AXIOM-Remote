@@ -121,6 +121,10 @@ void MainPage::Update(Button button, int8_t knob, IMenuSystem* menuSystem)
     case Button::BUTTON_6_DOWN:
         _whiteBalanceButton.SetHighlighted(true);
         break;
+    case Button::BUTTON_7_UP:
+        menuSystem->SetCurrentScreen(AvailableScreens::Histograms);
+        break;
+    
     default:
         break;
     }

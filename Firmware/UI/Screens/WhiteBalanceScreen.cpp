@@ -86,10 +86,10 @@ void WhiteBalanceScreen::Update(Button button, int8_t knob, IMenuSystem* menuSys
     case Button::BUTTON_5_UP:
         _addPresetButton.SetHighlighted(false);
         break;
-    case Button::BUTTON_6_DOWN:
+    case Button::BUTTON_7_DOWN:
         _setButton.SetHighlighted(true);
         break;
-    case Button::BUTTON_6_UP:
+    case Button::BUTTON_7_UP:
         _setButton.SetHighlighted(false);
         menuSystem->SetCurrentScreen(AvailableScreens::MainPage);
         break;

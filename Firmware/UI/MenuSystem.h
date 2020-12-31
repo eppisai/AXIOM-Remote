@@ -9,6 +9,7 @@
 #include "Screens/MainMenu.h"
 #include "Screens/SettingsSubMenu1.h"
 #include "Screens/WhiteBalanceScreen.h"
+#include "Screens/Histograms.h"
 #include "../../Bootloader/Periphery/ILI9341/ILI9341Device.h"
 //#include "../CentralDB.h"
 
@@ -23,7 +24,7 @@ class MenuSystem : public IMenuSystem
     AvailableScreens _currentScreenType;
 
     // TODO: Length has to be adjusted manually, as currently we use static init to save space on the MCU
-    IScreen* _availableScreens[4];
+    IScreen* _availableScreens[5];
 
     IUSBDevice* _usbDevice;
 
@@ -32,6 +33,7 @@ class MenuSystem : public IMenuSystem
     MainMenu _MainMenu;
     SettingsSubMenu1 _settingsSubMenu1;
     WhiteBalanceScreen _whiteBalance;
+    HistogramsScreen _histograms;
 
     void InitializeAvailableScreens();
 

@@ -6,6 +6,7 @@
 #include "../FontDefinitions.h"
 
 #include "../Widgets/Icon.h"
+#include "../Widgets/Icon2bit.h"
 
 class IDebugPainter;
 
@@ -43,6 +44,8 @@ class IPainter
     virtual void DrawImage(const uint8_t* data, uint16_t x, uint16_t y, uint16_t width, uint16_t height) = 0;
     virtual void DrawPixel(uint16_t x, uint16_t y, uint16_t color) = 0;
     virtual void DrawIcon(const Icon* image, uint16_t x, uint16_t y, uint16_t color) = 0;
+    virtual void DrawIcon2Bit(const Icon2bit* image, uint16_t x, uint16_t y, float transparency) = 0;
+    virtual uint16_t ApplyTransparency(float transparency, uint16_t color, uint16_t background) = 0;
     virtual void Fill(uint16_t fillColor) = 0;
     virtual void Dim() = 0;
 

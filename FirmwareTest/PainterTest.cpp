@@ -7,6 +7,8 @@
 // Test data
 #include "Images/LogoIcon.h"
 #include "Images/LogoIconOutput.h"
+#include "Images/LogoIcon2bit.h"
+#include "Images/LogoIcon2bitOutput.h"
 
 // Setup frame buffer and reset all values to 0
 uint16_t* SetupFramebuffer(uint16_t width, uint16_t height)
@@ -191,7 +193,6 @@ TEST_CASE("DrawIcon test")
     memset(framebuffer, 0, 15 * 15);
 
     painter.DrawIcon(&LogoIcon, 0, 0, 0x7);
-
     int index = 0;
     bool check = true;
 
@@ -211,4 +212,11 @@ TEST_CASE("DrawIcon test")
 
     REQUIRE(index == 60);
     REQUIRE(check == true);
+}
+
+TEST_CASE("DrawIcon2bit test")
+{
+    uint16_t* framebuffer = new uint16_t[15 * 15];
+    PainterMod painter(framebuffer, 15, 15);
+    memset(framebuffer, 0, 15 * 15);
 }

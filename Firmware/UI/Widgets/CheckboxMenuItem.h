@@ -2,8 +2,8 @@
 #define CHECKBOXMENUITEM_H
 
 #include "MenuItem.h"
-#include "../../../Firmware/Media/Icons/checkboxfalse_icon.h"
-#include "../../../Firmware/Media/Icons/checkboxtrue_icon.h"
+#include "../../../Firmware/Media/Icons/checkboxfalse_icon2bit.h"
+#include "../../../Firmware/Media/Icons/checkboxtrue_icon2bit.h"
 
 class IPainter;
 
@@ -44,7 +44,7 @@ class CheckBoxMenuItem : public MenuItem
          
         // Value
         auto checkbox = (_checkboxValue) ? checkboxtrue_icon : checkboxfalse_icon;
-        painter->DrawIcon(&checkbox, _x + 235 , _y + _verticalLabelOffset - 17, _currentTextColor);
+        painter->DrawIcon2Bit(&checkbox, _x + 235 , _y + _verticalLabelOffset - 17, 1);
     }
 
     void ExecuteAction(IMenuSystem* menuSystem) override

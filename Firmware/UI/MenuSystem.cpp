@@ -6,7 +6,7 @@
 
 MenuSystem::MenuSystem(IUSBDevice* usbDevice, CentralDB* centraldb) :
     _currentScreen(nullptr), _usbDevice(usbDevice), _mainPage(usbDevice), _MainMenu(usbDevice, centraldb),
-    _settingsSubMenu1(usbDevice, centraldb), _whiteBalance(usbDevice)
+    _settingsSubMenu1(usbDevice, centraldb), _whiteBalance(usbDevice),_keyboard(usbDevice)
 {
     InitializeAvailableScreens();
 
@@ -34,6 +34,7 @@ void MenuSystem::InitializeAvailableScreens()
     _availableScreens[1] = &_MainMenu;
     _availableScreens[2] = &_settingsSubMenu1;
     _availableScreens[3] = &_whiteBalance;
+    _availableScreens[4] = &_keyboard;
 }
 
 void MenuSystem::Draw(IPainter* painter)

@@ -214,7 +214,7 @@ TEST_CASE("DrawIcon test")
     REQUIRE(check == true);
 }
 
-TEST_CASE("Draw2BitIcon test")
+TEST_CASE("DrawIcon2bit test")
 {
     uint16_t* framebuffer = new uint16_t[12 * 12];
     PainterMod painter(framebuffer, 12, 12);
@@ -224,9 +224,9 @@ TEST_CASE("Draw2BitIcon test")
     int index = 0;
     bool check = true;
 
-    for (uint16_t yIndex = 0; yIndex < TwoBitIcon.Height; yIndex++)
+    for (uint16_t yIndex = 0; yIndex < LogoIcon.Height; yIndex++)
     {
-        for (uint16_t xIndex = 0; xIndex < TwoBitIcon.Width; xIndex++)
+        for (uint16_t xIndex = 0; xIndex < LogoIconIcon.Width; xIndex++)
         {
             if (framebuffer[yIndex * 12 + xIndex] != LogoIcon2Bit[index])
             {

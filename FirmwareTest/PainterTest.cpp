@@ -238,6 +238,6 @@ TEST_CASE("DrawIcon2bit test")
         }
     }
 
-    REQUIRE(index == 120);
+    REQUIRE(index == 144);
     REQUIRE(check == true);
 }

@@ -228,7 +228,7 @@ TEST_CASE("Draw2BitIcon test")
     {
         for (uint16_t xIndex = 0; xIndex < TwoBitIcon.Width; xIndex++)
         {
-            if (framebuffer[yIndex * 15 + xIndex] != LogoIcon2Bit[index])
+            if (framebuffer[yIndex * 12 + xIndex] != LogoIcon2Bit[index])
             {
                 check = false;
                 break;

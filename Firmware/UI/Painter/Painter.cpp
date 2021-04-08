@@ -638,7 +638,7 @@ void Painter::DrawIcon2Bit(const Icon2bit* image, uint16_t x, uint16_t y, float 
                 for (int i = 0; i < 8; i+=2)
                 {
                     uint8_t pixel = ((1 << 2) - 1) & (data >> i);
-                    
+
                     if(pixel)
                     {
                         uint16_t pixelcolor = image->IndexedColors[pixel];
@@ -654,19 +654,19 @@ void Painter::DrawIcon2Bit(const Icon2bit* image, uint16_t x, uint16_t y, float 
         }  
 }
 
-//
+//Taking background color in Transparency amount, and Pixel color in (1 - transparency) amount in the new color
 uint16_t Painter::ApplyTransparency(float transparency, uint16_t color, uint16_t background)
-{
+{   
     uint16_t pixelColor = 0;
 
-    //blue 
-    pixelColor += (color & 0x001F)*(1 - transparency) + (background & 0x001F)*transparency;
+    //Red color channel with transparency amount of Background color
+    pixelColor +=  uint16_t( color*(1 - transparency) + background*transparency ) & 0xF800;
 
-    //green
+    //Green color channel with transparency amount of Background color
     pixelColor += uint16_t( (color & 0x07FF )*(1 - transparency) + (background & 0x07FF )*transparency ) & 0x07E0;
 
-    //red
-    pixelColor +=  uint16_t( color*(1 - transparency) + background*transparency ) & 0xF800;
+    //Green color channel with transparency amount of Background color
+    pixelColor += (color & 0x001F)*(1 - transparency) + (background & 0x001F)*transparency;
 
     return pixelColor;
 } 

@@ -625,7 +625,7 @@ uint16_t Painter::ProcessByte(uint8_t data, uint16_t x, uint16_t xIndex, uint16_
     return xIndex;
 }
 
-void Painter::DrawIcon2Bit(const Icon2bit* image, uint16_t x, uint16_t y, float transparency)
+void Painter::DrawIcon2Bit(const Icon2bit* image, uint16_t x, uint16_t y, float transparency = 0)
 {
         int b = 0;
         for (uint16_t yIndex = 0; yIndex < image->Height; yIndex++)
@@ -635,16 +635,16 @@ void Painter::DrawIcon2Bit(const Icon2bit* image, uint16_t x, uint16_t y, float 
             for (uint16_t xIndex = 0; xIndex < image->Width;)
             {
                 uint8_t data = image->Data[b];
-                for (int i = 0; i < 4; i++)
+                for (int i = 0; i < 8; i+=2)
                 {
-                    uint8_t pixel = ( data >> 2*(3-i) ) % 4;
-
+                    uint8_t pixel = ((1 << 2) - 1) & (data >> i);
+                    
                     if(pixel)
                     {
                         uint16_t pixelcolor = image->IndexedColors[pixel];
                         uint16_t backcolor = _framebuffer[y * _framebufferWidth + x];
                         uint16_t finalcolor = ApplyTransparency(transparency, pixelcolor, backcolor);
-                        DrawPixel(x + xIndex, yPos, pixelcolor);
+                        DrawPixel(x + xIndex, yPos, finalcolor);
                     }
 
                     xIndex++;
@@ -660,13 +660,13 @@ uint16_t Painter::ApplyTransparency(float transparency, uint16_t color, uint16_t
     uint16_t pixelColor = 0;
 
     //blue 
-    pixelColor += (color & 0x001F)*transparency + (background & 0x001F)*(1-transparency);
+    pixelColor += (color & 0x001F)*(1 - transparency) + (background & 0x001F)*transparency;
 
     //green
-    pixelColor += uint16_t( (color & 0x07FF )*transparency + (background & 0x07FF )*(1-transparency) ) & 0x07E0;
+    pixelColor += uint16_t( (color & 0x07FF )*(1 - transparency) + (background & 0x07FF )*transparency ) & 0x07E0;
 
     //red
-    pixelColor +=  uint16_t( color*transparency + background*(1-transparency) ) & 0xF800;
+    pixelColor +=  uint16_t( color*(1 - transparency) + background*transparency ) & 0xF800;
 
     return pixelColor;
 } 

@@ -43,8 +43,8 @@ class CheckBoxMenuItem : public MenuItem
         painter->DrawText(_x + 5, _y + _verticalLabelOffset, _label, _currentTextColor, TextAlign::TEXT_ALIGN_LEFT, 0);
          
         // Value
-        auto checkbox = (_checkboxValue) ? checkboxtrue_icon : checkboxfalse_icon;
-        painter->DrawIcon2Bit(&checkbox, _x + 235 , _y + _verticalLabelOffset - 17, 1);
+        auto checkbox = (_checkboxValue) ? checkboxtrue2bit_icon : checkboxfalse2bit_icon;
+        painter->DrawIcon2Bit(&checkbox, _x + 235 , _y + _verticalLabelOffset - 17, 0);
     }
 
     void ExecuteAction(IMenuSystem* menuSystem) override

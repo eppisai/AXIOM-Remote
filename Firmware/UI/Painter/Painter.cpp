@@ -665,7 +665,7 @@ uint16_t Painter::ApplyTransparency(float transparency, uint16_t color, uint16_t
     //Green color channel with transparency amount of Background color
     pixelColor += uint16_t( (color & 0x07FF )*(1 - transparency) + (background & 0x07FF )*transparency ) & 0x07E0;
 
-    //Green color channel with transparency amount of Background color
+    //blue color channel with transparency amount of Background color
     pixelColor += (color & 0x001F)*(1 - transparency) + (background & 0x001F)*transparency;
 
     return pixelColor;

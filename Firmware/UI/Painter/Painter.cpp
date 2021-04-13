@@ -663,10 +663,14 @@ uint16_t Painter::ApplyTransparency(float transparency, uint16_t color, uint16_t
     pixelColor +=  uint16_t( color*(1 - transparency) + background*transparency ) & 0xF800;
 
     //Green color channel with transparency amount of Background color
-    pixelColor += uint16_t( (color & 0x07FF )*(1 - transparency) + (background & 0x07FF )*transparency ) & 0x07E0;
+    pixelColor += uint16_t( (color & 0x07E0 )*(1 - transparency) + (background & 0x07E0 )*transparency ) & 0x07E0;
 
     //blue color channel with transparency amount of Background color
     pixelColor += (color & 0x001F)*(1 - transparency) + (background & 0x001F)*transparency;
 
     return pixelColor;
 } 
+
+/* Using 0xF800, 0X07E0, 0X001F as R, G, B color masks for extraction
+complete article - https://docs.microsoft.com/en-us/windows/win32/directshow/working-with-16-bit-rgb
+*/

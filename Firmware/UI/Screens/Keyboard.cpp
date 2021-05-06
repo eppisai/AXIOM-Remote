@@ -13,7 +13,7 @@
 
 
 KeyboardScreen::KeyboardScreen(IUSBDevice * usbDevice):
-  IScreen(usbDevice), _BACKSPACE("Erase"), _marginTop(1), _buttonMargin(1), _x(30), _y(80), _width(320), _height(30), _left("Aa"), _right("123*#"), _enter("Done"), _topButtonBar(ButtonBar(0, 2, 320, 30)), _capsButton("Back"), _clearall("Erase All"), _up( & up_icon), _down( & down_icon) {
+  IScreen(usbDevice), _backspace("Erase"), _marginTop(1), _buttonMargin(1), _x(30), _y(80), _width(320), _height(30), _left("Aa"), _right("123*#"), _enter("Done"), _topButtonBar(ButtonBar(0, 2, 320, 30)), _capsButton("Back"), _clearall("Erase All"), _up( & up_icon), _down( & down_icon) {
     //bottom button bar
     _bottomButtonBar.SetButton(ButtonPosition::Left, & _left);
 
@@ -28,8 +28,8 @@ KeyboardScreen::KeyboardScreen(IUSBDevice * usbDevice):
     _clearall.SetHighlightBackgroundColor((uint16_t) Color565::Navy);
     _topButtonBar.SetButton(ButtonPosition::Right, & _clearall);
 
-    _BACKSPACE.SetHighlightBackgroundColor((uint16_t) Color565::Navy);
-    _topButtonBar.SetButton(ButtonPosition::Center, & _BACKSPACE);
+    _backspace.SetHighlightBackgroundColor((uint16_t) Color565::Navy);
+    _topButtonBar.SetButton(ButtonPosition::Center, & _backspace);
 
     _capsButton.SetHighlightBackgroundColor((uint16_t) Color565::Navy);
     _topButtonBar.SetButton(ButtonPosition::Left, & _capsButton);
@@ -43,12 +43,12 @@ KeyboardScreen::KeyboardScreen(IUSBDevice * usbDevice):
     strcpy(_capital, "QWERTYUIOPASDFGHJKLZXCVBNM.-?~");
     strcpy(_small, "qwertyuiopasdfghjklzxcvbnm.-?~");
 
-    //_current_key is used to move the pointer in keyboard
+    //_current_key is used to move between keys in keyboard
     _current_key = 0;
 
     //enum varibales used for switching keyboard layouts
-    _keyboardlayout = Keylayout::Uppercase;
-    _currentkeyboardlayout = Keylayout::Uppercase;
+    _keyboardLayout = Keylayout::Uppercase;
+    _currentKeyboardLayout = Keylayout::Uppercase;
 
     //button dimensions
     _buttonDimension = _width / _maxButtonNumber - _buttonMargin;
@@ -59,12 +59,12 @@ KeyboardScreen::KeyboardScreen(IUSBDevice * usbDevice):
 
 void KeyboardScreen::Draw(IPainter * painter) {
   painter -> SetFont(Font::FreeSans9pt7b);
-  Drawtextfeild(painter, input);
+  DrawTextField(painter, input);
   DrawBottomButtonBar(painter);
   DrawKeyboard(painter);
 }
 
-void KeyboardScreen::Drawtextfeild(IPainter * painter, char * input) {
+void KeyboardScreen::DrawTextField(IPainter * painter, char * input) {
 
   _topButtonBar.Draw(painter);
   painter -> DrawFillRectangle(5, 40, GlobalSettings::LCDWidth - 10, 30, (uint16_t) Color565::White);
@@ -89,7 +89,7 @@ void KeyboardScreen::Drawtextfeild(IPainter * painter, char * input) {
 }
 
 void KeyboardScreen::DrawKeyboard(IPainter * painter) {
-  Keyboardlayout();
+  KeyboardLayout();
   uint16_t temp = _y;
   bool highlighted = false;
   for (int position = 0; position < 30; position++) {
@@ -115,19 +115,19 @@ void KeyboardScreen::DrawKey(char key, IPainter * painter, uint8_t buttonMargin,
 
 }
 
-void KeyboardScreen::Keyboardlayout() {
-  switch (_keyboardlayout) {
+void KeyboardScreen::KeyboardLayout() {
+  switch (_keyboardLayout) {
   case Keylayout::Uppercase:
     _keyboard = _capital;
-    _currentkeyboardlayout = Keylayout::Uppercase;
+    _currentKeyboardLayout = Keylayout::Uppercase;
     break;
   case Keylayout::Lowercase:
     _keyboard = _small;
-    _currentkeyboardlayout = Keylayout::Lowercase;
+    _currentKeyboardLayout = Keylayout::Lowercase;
     break;
   case Keylayout::Numeric:
     _keyboard = _num;
-    _currentkeyboardlayout = Keylayout::Numeric;
+    _currentKeyboardLayout = Keylayout::Numeric;
     break;
   }
 }
@@ -165,19 +165,19 @@ void KeyboardScreen::Update(Button button, int8_t knob, IMenuSystem * menuSystem
   case Button::BUTTON_4_DOWN:
     break;
   case Button::BUTTON_4_UP:
-    if (_currentkeyboardlayout == Keylayout::Uppercase || _currentkeyboardlayout == Keylayout::Numeric) {
-      _keyboardlayout = Keylayout::Lowercase;
+    if (_currentKeyboardLayout == Keylayout::Uppercase || _currentKeyboardLayout == Keylayout::Numeric) {
+      _keyboardLayout = Keylayout::Lowercase;
     } else {
-      _keyboardlayout = Keylayout::Uppercase;
+      _keyboardLayout = Keylayout::Uppercase;
     }
     break;
   case Button::BUTTON_5_DOWN:
     break;
   case Button::BUTTON_5_UP:
-    if (_currentkeyboardlayout == Keylayout::Uppercase || _currentkeyboardlayout == Keylayout::Lowercase) {
-      _keyboardlayout = Keylayout::Numeric;
+    if (_currentKeyboardLayout == Keylayout::Uppercase || _currentKeyboardLayout == Keylayout::Lowercase) {
+      _keyboardLayout = Keylayout::Numeric;
     } else {
-      _keyboardlayout = Keylayout::Uppercase;
+      _keyboardLayout = Keylayout::Uppercase;
     }
     break;
   case Button::BUTTON_6_DOWN:

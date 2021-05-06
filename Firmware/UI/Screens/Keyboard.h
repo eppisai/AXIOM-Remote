@@ -17,7 +17,7 @@ class KeyboardScreen : public IScreen
  
   PushButton _capsButton;
 
-  PushButton _BACKSPACE;
+  PushButton _backspace;
   PushButton _clearall;
 
   // in case we want to add side buttons 
@@ -50,14 +50,14 @@ class KeyboardScreen : public IScreen
   char _small[30];
   //_current_key is used to move the pointer in keyboard
   int _current_key;
-  Keylayout _keyboardlayout,_currentkeyboardlayout;
+  Keylayout _keyboardLayout, _currentKeyboardLayout;
   uint8_t _buttonDimension;
   uint16_t _currentBackgroundColorkey;
   uint16_t _highlightBackgroundColorkey;
   //input is text that user types in.
   char input[64];
-  void Drawtextfeild(IPainter* painter,char* input);
-  void Keyboardlayout();
+  void DrawTextField(IPainter* painter,char* input);
+  void KeyboardLayout();
   void DrawKeyboard(IPainter* painter);
   void DrawKey(char key,IPainter* painter,uint8_t buttonMargin,uint16_t y,bool highlighted);
 

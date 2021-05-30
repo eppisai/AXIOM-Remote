@@ -26,11 +26,12 @@ class Painter : public IPainter
 
   protected:
     volatile uint16_t* _framebuffer;
+    volatile uint16_t* _transitionframebuffer;
     uint16_t _framebufferWidth;
     uint16_t _framebufferHeight;
 
   public:
-    Painter(volatile uint16_t* framebuffer, uint16_t framebufferWidth, uint8_t framebufferHeight);
+    Painter(volatile uint16_t* framebuffer,volatile uint16_t* transitionframebuffer, uint16_t framebufferWidth, uint8_t framebufferHeight);
 
     // Debugging
     void SetDebugOverlay(IDebugPainter* debugPainter);
@@ -70,6 +71,7 @@ class Painter : public IPainter
                           uint16_t textblockwidth) override;
     uint16_t GetStringFramebufferWidth(const char* str) override;
     uint8_t GetCurrentFontHeight() override;
+    void SetTransitionFramebuffer() override;
 };
 
 #endif /* PAINTER_H */

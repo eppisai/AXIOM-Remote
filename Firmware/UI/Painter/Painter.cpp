@@ -19,8 +19,8 @@
         b = t;                                                                                                         \
     }
 
-Painter::Painter(volatile uint16_t* framebuffer, uint16_t framebufferWidth, uint8_t framebufferHeight) :
-    _framebuffer(framebuffer), _framebufferWidth(framebufferWidth),
+Painter::Painter(volatile uint16_t* framebuffer, volatile uint16_t* transitionframebuffer, uint16_t framebufferWidth, uint8_t framebufferHeight) :
+    _framebuffer(framebuffer), _transitionframebuffer(transitionframebuffer), _framebufferWidth(framebufferWidth),
     _framebufferHeight(framebufferHeight), _fontList{FreeSans9pt7b, FreeSans12pt7b, FreeSans18pt7b, FreeSans24pt7b},
     _cursorX(0), _cursorY(0), _debugPainter(nullptr)
 {
@@ -623,4 +623,13 @@ uint16_t Painter::ProcessByte(uint8_t data, uint16_t x, uint16_t xIndex, uint16_
     }
 
     return xIndex;
+}
+
+void Painter::SetTransitionFramebuffer(){
+   int x,y;
+   for (x = 0; x < 320; x++) {
+            for (y = 0; y < 240; y++) {
+                _transitionframebuffer[y*320 + x] = _framebuffer[y*320+x];
+            }
+         } 
 }

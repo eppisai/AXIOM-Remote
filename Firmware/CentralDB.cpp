@@ -7,13 +7,19 @@
 #include <array>
 
 CentralDB::CentralDB() :
-    _observers{}, _observerCount{0}, _attributes{{Attribute::ID::FRAME_RATE, Attribute::Type::FLOAT},
+    _observers{}, _observerCount{0}, _attributes{
+                                                 {Attribute::ID::FRAME_RATE, Attribute::Type::FLOAT},
                                                  {Attribute::ID::APERTURE, Attribute::Type::FLOAT},
                                                  {Attribute::ID::WHITE_BALANCE, Attribute::Type::UINT32},
                                                  {Attribute::ID::TEST_STRING, Attribute::Type::STRING},
                                                  {Attribute::ID::TEST_BOOLEAN, Attribute::Type::BOOLEAN},
                                                  {Attribute::ID::TEST_INT32, Attribute::Type::INT32},
-                                                 {Attribute::ID::REMOTE_LCD_BRIGHTNESS, Attribute::Type::UINT32}}
+                                                 {Attribute::ID::REMOTE_LCD_BRIGHTNESS, Attribute::Type::UINT32},
+                                                 {Attribute::ID::TRANSITION_ACTIVE, Attribute::Type::BOOLEAN},
+                                                 {Attribute::ID::TRANSITION_COUNTER, Attribute::Type::UINT32},
+                                                 {Attribute::ID::TRANSITION_ANIMATION_SPEED, Attribute::Type::UINT32},
+                                                 {Attribute::ID::TRANSITION_ANIMATION_TYPE, Attribute::Type::UINT32},
+                                                }
 // TODO: add any missing attributes
 {
 }

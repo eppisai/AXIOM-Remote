@@ -23,6 +23,8 @@ class ILI9341Display// : public ILCDDevice
 
     volatile uint16_t* _framebuffer;//[_framebufferSize];
     //uint16_t _framebuffer[320 * 240];
+    volatile uint16_t* _transitionframebuffer;
+    CentralDB * _db;
 
     unsigned LCDPumpRead(void);
     unsigned LCDPumpReadf(void);
@@ -34,7 +36,7 @@ class ILI9341Display// : public ILCDDevice
 
 public:
 
-    explicit ILI9341Display(volatile uint16_t* framebuffer);
+    explicit ILI9341Display(volatile uint16_t* framebuffer, volatile uint16_t* transitionframebuffer);
 
     uint16_t GetWidth()
     {
@@ -47,6 +49,7 @@ public:
     }
 
     volatile uint16_t* GetFramebuffer();
+    volatile uint16_t* GetTransitionFramebuffer();
     void ClearFramebuffer(uint16_t color);
     void UpdateFramebuffer();
 

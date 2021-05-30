@@ -22,6 +22,7 @@
 
 #include "UI/MenuSystem.h"
 #include "UI/Painter/Painter.h"
+#include "VirtualLCDDevice.h"
 
 // Debug
 #define DEBUG_DRAW
@@ -159,6 +160,9 @@ int main(int argc, char* argv[])
     ProcessCommandLine(argc, argv);
 
     auto frameBuffer = new uint16_t[FRAMEBUFFER_WIDTH * FRAMEBUFFER_HEIGHT];
+    auto transitionframeBuffer = new uint16_t[FRAMEBUFFER_WIDTH * FRAMEBUFFER_HEIGHT];
+    auto framebuffer = new uint16_t[FRAMEBUFFER_WIDTH * FRAMEBUFFER_HEIGHT];
+    
 
     SDL_Window* window;
     SDL_GLContext glContext;
@@ -175,16 +179,15 @@ int main(int argc, char* argv[])
     texture_rect.w = FRAMEBUFFER_WIDTH * 4;  // the width of the texture
     texture_rect.h = FRAMEBUFFER_HEIGHT * 4; // the height of the texture
 
-    Painter painter(frameBuffer, FRAMEBUFFER_WIDTH, FRAMEBUFFER_HEIGHT);
-
-#ifdef DEBUG_DRAW
+    Painter painter(frameBuffer,transitionframeBuffer, FRAMEBUFFER_WIDTH, FRAMEBUFFER_HEIGHT);
+    CentralDB centralDB;
+    centralDB.SetBoolean(Attribute::ID::TRANSITION_ACTIVE,false);
+  #ifdef DEBUG_DRAW
     DebugPainter debugPainter;
     painter.SetDebugOverlay(&debugPainter);
-#endif
+  #endif
 
     USBCDCTerminalDevice cdcDevice;
-
-    CentralDB centralDB;
 
     MenuSystem menuSystem(&cdcDevice, &centralDB);
 
@@ -199,6 +202,7 @@ int main(int argc, char* argv[])
         std::make_shared<VirtualUI>(window, displayTextureID, &centralDB, partialScreenshotHandler);
 
     centralDB.SetUint32(Attribute::ID::REMOTE_LCD_BRIGHTNESS, 75);
+    std::cout<<centralDB.GetBoolean(Attribute::ID::TRANSITION_ACTIVE)<<" \n";
 
     bool appIsRunning = true;
     const int frames = 60;
@@ -216,15 +220,17 @@ int main(int argc, char* argv[])
 
         glClear(GL_COLOR_BUFFER_BIT);
 
-#ifdef DEBUG_DRAW
+ #ifdef DEBUG_DRAW
         debugPainter.SetEnable(debugOverlayEnabled);
-#endif
+ #endif
 
         menuSystem.Draw(&painter);
+        VirtualLCDDevice display(frameBuffer,transitionframeBuffer,framebuffer,&centralDB);
+        display.DisplayFramebuffer();
 
         glBindTexture(GL_TEXTURE_2D, displayTextureID);
         glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, FRAMEBUFFER_WIDTH, FRAMEBUFFER_HEIGHT, GL_RGB, GL_UNSIGNED_SHORT_5_6_5,
-                        frameBuffer);
+                       framebuffer);
         glBindTexture(GL_TEXTURE_2D, 0);
 
         button = Button::BUTTON_NONE;

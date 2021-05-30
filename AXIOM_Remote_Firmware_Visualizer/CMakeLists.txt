@@ -39,7 +39,7 @@ MESSAGE(STATUS "Firmware files: ${FIRMWARE_SOURCES}")
 #MESSAGE(STATUS "Bootloader USB files: ${BOOTLOADER_SOURCES}")
 #include_directories("${CMAKE_CURRENT_SOURCE_DIR}/../Bootloader/Periphery/USB/")
 
-SET(VISUALIZER_SOURCES Main.cpp VirtualUI.cpp imgui_modules/imgui_impl_sdl.cpp imgui_modules/imgui_impl_opengl3.cpp)
+SET(VISUALIZER_SOURCES Main.cpp VirtualUI.cpp VirtualLCDDevice.cpp imgui_modules/imgui_impl_sdl.cpp imgui_modules/imgui_impl_opengl3.cpp)
 
 # Copy image folder to build folder
 file(COPY images DESTINATION ${CMAKE_BINARY_DIR})

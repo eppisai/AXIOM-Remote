@@ -21,6 +21,9 @@ class MenuSystem : public IMenuSystem
   protected:
     IScreen* _currentScreen;
     AvailableScreens _currentScreenType;
+    uint8_t _cur,_prev;
+
+    CentralDB* _db;
 
     // TODO: Length has to be adjusted manually, as currently we use static init to save space on the MCU
     IScreen* _availableScreens[4];
@@ -38,7 +41,8 @@ class MenuSystem : public IMenuSystem
   public:
     explicit MenuSystem(IUSBDevice* usbDevice, CentralDB* centraldb);
     virtual ~MenuSystem();
-
+    
+    void SetTransitionType();
     void SetCurrentScreen(AvailableScreens menu) override;
     AvailableScreens GetCurrentScreen();
 

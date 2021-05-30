@@ -26,7 +26,9 @@
 
 // Defined in procdefs.ld
 volatile extern uint16_t framebuffer[ILI9341_TFTWIDTH * ILI9341_TFTHEIGHT];
-ILI9341Display display(framebuffer);
+volatile extern uint16_t transitionframebuffer[ILI9341_TFTWIDTH * ILI9341_TFTHEIGHT];
+CentralDB centralDB;
+ILI9341Display display(framebuffer, transitionframebuffer, &centralDB);
 
 void ConfigGPIO()
 {
@@ -537,7 +539,6 @@ int main()
 
     Setup(display, cdcDevice);
 
-    CentralDB centralDB;
     CentralDBObserver lcdObserver(Attribute::ID::REMOTE_LCD_BRIGHTNESS, [](const CentralDB& db) {
         uint32_t backlightPercentage = db.GetUint32(Attribute::ID::REMOTE_LCD_BRIGHTNESS);
         display.SetBacklight(backlightPercentage);
@@ -551,7 +552,7 @@ int main()
 
     MenuSystem menuSystem(&cdcDevice, &centralDB);
 
-    Painter generalPainter(display.GetFramebuffer(), display.GetWidth(), display.GetHeight());
+    Painter generalPainter(display.GetFramebuffer(), display.GetTransitionFramebuffer(), display.GetWidth(), display.GetHeight());
     IPainter* painter = &generalPainter;
 
 #ifdef DEBUG_DRAW

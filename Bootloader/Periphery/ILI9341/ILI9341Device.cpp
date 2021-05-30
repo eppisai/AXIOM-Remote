@@ -5,9 +5,10 @@
 //#include "LCDDefinitions.h"
 #include "Helpers.h"
 
-ILI9341Display::ILI9341Display(volatile uint16_t* framebuffer)
+ILI9341Display::ILI9341Display(volatile uint16_t* framebuffer, volatile uint16_t* transitionframebuffer)
 {
     _framebuffer = framebuffer;
+    _transitionframebuffer = transitionframebuffer;
 }
 
 void ILI9341Display::SetupBacklightControl()
@@ -64,6 +65,11 @@ void ILI9341Display::LCDPumpCommand(uint8_t cmd)
 volatile uint16_t* ILI9341Display::GetFramebuffer()
 {
     return _framebuffer;
+}
+
+volatile uint16_t* ILI9341Display::GetTransitionFramebuffer()
+{
+    return _transitionframebuffer;
 }
 
 void ILI9341Display::ClearFramebuffer(uint16_t color)

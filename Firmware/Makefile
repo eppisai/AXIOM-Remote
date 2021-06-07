@@ -10,7 +10,7 @@ DEVICE=32MZ2048ECG100
 LINKER_SCRIPT=procdefs_app.ld
 
 BUILD_DIR=build
-INC_DIR=-I${XC32_PATH}/pic32mx/include -I../Common
+INC_DIR=-I${XC32_PATH}/pic32mx/include -I../Common -I$(shell pwd)/../Bootloader
 
 # Bootloader modules are added temporarily, till UA can be flashed through BL
 SOURCE_FILES=$(wildcard *.cpp) $(wildcard **/*.cpp) $(wildcard UI/**/*.cpp) $(wildcard ../Bootloader/Periphery/**/*.cpp)

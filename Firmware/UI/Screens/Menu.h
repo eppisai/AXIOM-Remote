@@ -20,8 +20,6 @@
 #include "../../GlobalSettings.h"
 
 #include "../../../Bootloader/Periphery/USB/IUSBDevice.h"
-#include "../../../Bootloader/Periphery/ILI9341/ILI9341Device.h"
-
 #include "../../CentralDB.h"
 
 //#include <Helpers.h>

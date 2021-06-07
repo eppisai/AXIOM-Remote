@@ -1,10 +1,10 @@
 // Configuration
-#include "../Bootloader/Configuration/PIC32.h"
+#include "Configuration/PIC32.h"
 
 // Periphery
-#include "../Bootloader/Periphery/ILI9341/ILI9341Device.h"
-#include "../Bootloader/Periphery/USB/USBCDCDevice.h"
-#include "../Bootloader/Periphery/I2C/I2C.h"
+#include "Periphery/ILI9341/ILI9341Device.h"
+#include "Periphery/USB/USBCDCDevice.h"
+#include "Periphery/I2C/I2C.h"
 
 // Menus/Pages
 #include "UI/MenuSystem.h"

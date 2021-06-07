@@ -7,7 +7,6 @@
 
 #include "../Color565.h"
 #include "../../GlobalSettings.h"
-#include "../../../Bootloader/Periphery/ILI9341/ILI9341Device.h"
 #include "../../CentralDB.h"
 #include "../../CentralDBObserver.h"
 

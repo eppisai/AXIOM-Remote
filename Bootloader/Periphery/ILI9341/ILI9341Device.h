@@ -11,7 +11,9 @@
 #include <stdint.h>
 
 #include "LCDDefinitions.h"
-//#include "ILCDDevice.h"
+#include "../../../Firmware/CentralDB.h"
+#include "../../../Firmware/UI/TransitionDefinitions.h"
+#include "ILCDDevice.h"
 
 class ILI9341Display// : public ILCDDevice
 {
@@ -36,7 +38,7 @@ class ILI9341Display// : public ILCDDevice
 
 public:
 
-    explicit ILI9341Display(volatile uint16_t* framebuffer, volatile uint16_t* transitionframebuffer);
+    explicit ILI9341Display(volatile uint16_t* framebuffer, volatile uint16_t* transitionframebuffer, CentralDB* db);
 
     uint16_t GetWidth()
     {

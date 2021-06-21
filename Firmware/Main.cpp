@@ -27,8 +27,10 @@
 // Defined in procdefs.ld
 volatile extern uint16_t framebuffer[ILI9341_TFTWIDTH * ILI9341_TFTHEIGHT];
 volatile extern uint16_t transitionframebuffer[ILI9341_TFTWIDTH * ILI9341_TFTHEIGHT];
+
 CentralDB centralDB;
-ILI9341Display display(framebuffer, transitionframebuffer, &centralDB);
+bool transition_active = false;
+ILI9341Display display(framebuffer, transitionframebuffer, &transition_active);
 
 void ConfigGPIO()
 {
@@ -534,7 +536,7 @@ void init_uart2()
 }
 
 int main()
-{
+{   
     USBCDCDevice cdcDevice;
 
     Setup(display, cdcDevice);
@@ -550,7 +552,7 @@ int main()
 
     display.SetBacklight(50);
 
-    MenuSystem menuSystem(&cdcDevice, &centralDB);
+    MenuSystem menuSystem(&cdcDevice, &centralDB, &transition_active);
 
     Painter generalPainter(display.GetFramebuffer(), display.GetTransitionFramebuffer(), display.GetWidth(), display.GetHeight());
     IPainter* painter = &generalPainter;

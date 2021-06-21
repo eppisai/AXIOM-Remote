@@ -15,25 +15,25 @@
 #define FRAMEBUFFER_WIDTH 320
 #define FRAMEBUFFER_HEIGHT 240
 
-VirtualLCDDevice::VirtualLCDDevice(volatile uint16_t * frameBuffer, volatile uint16_t * transitionframeBuffer, volatile uint16_t * framebuffer, CentralDB * db) {
+VirtualLCDDevice::VirtualLCDDevice(volatile uint16_t * frameBuffer, volatile uint16_t * transitionframeBuffer, volatile uint16_t * framebuffer,bool* transition_active) {
   _frameBuffer = frameBuffer;
   _transitionframeBuffer = transitionframeBuffer;
   _framebuffer = framebuffer;
-  _db = db;
+  _transition_active = transition_active;
 
 }
 
 void VirtualLCDDevice::DisplayFramebuffer() {
   int x, y;
-  int transition_animation_type = _db -> GetUint32(Attribute::ID::TRANSITION_ANIMATION_TYPE);
-  int transition_animation_speed = _db -> GetUint32(Attribute::ID::TRANSITION_ANIMATION_SPEED);
-  int transition_counter = _db -> GetUint32(Attribute::ID::TRANSITION_COUNTER);
-  if (_db -> GetBoolean(Attribute::ID::TRANSITION_ACTIVE)) {
+  int transition_animation_type = 0;
+  int transition_animation_speed = 60;
+  int transition_counter = 255;
+  // int transition_animation_speed = 2;
+  if (*_transition_active) {
     while (transition_counter > 0) {
       std::cout << "transition speed    " << transition_animation_speed << std::endl;
       if (transition_counter <= transition_animation_speed - 1) {
-        _db -> SetBoolean(Attribute::ID::TRANSITION_ACTIVE, false);
-        _db -> SetUint32(Attribute::ID::TRANSITION_ACTIVE, 0);
+        *_transition_active = false;
         std::cout << "transition active false" << std::endl;
       }
       std::cout << transition_animation_type << "\n";
@@ -75,18 +75,28 @@ void VirtualLCDDevice::DisplayFramebuffer() {
       }
       if (transition_animation_type == TRANSITION_PUSH_LEFT) {
 
-        uint16_t offset = (float)(transition_counter) / (float)(255) * FRAMEBUFFER_WIDTH;
+        uint16_t offset = ((float)(transition_counter) / (float)(255)) * FRAMEBUFFER_WIDTH;
 
-        for (x = 0; x < FRAMEBUFFER_WIDTH; x++) {
-          if (x <= offset) {
-            for (y = 0; y < FRAMEBUFFER_HEIGHT; y++) {
-              _framebuffer[y * FRAMEBUFFER_WIDTH + x] = _transitionframeBuffer[(x + (FRAMEBUFFER_WIDTH - offset)) + y * FRAMEBUFFER_WIDTH];
-            }
-          } else {
-            for (y = 0; y < FRAMEBUFFER_HEIGHT; y++) {
-              _framebuffer[y * FRAMEBUFFER_WIDTH + x] = _frameBuffer[(x - offset) + y * FRAMEBUFFER_WIDTH];
-            }
+        // for (x = 0; x < FRAMEBUFFER_WIDTH; x++) {
+        //   if (x <= offset) {
+        //     for (y = 0; y < FRAMEBUFFER_HEIGHT; y++) {
+        //       _framebuffer[y * FRAMEBUFFER_WIDTH + x] = _transitionframeBuffer[(x + (FRAMEBUFFER_WIDTH - offset)) + y * FRAMEBUFFER_WIDTH];
+        //     }
+        //   } else {
+        //     for (y = 0; y < FRAMEBUFFER_HEIGHT; y++) {
+        //       _framebuffer[y * FRAMEBUFFER_WIDTH + x] = _frameBuffer[(x - offset) + y * FRAMEBUFFER_WIDTH];
+        //     }
+        //   }
+        // }
+
+        for(int index = 0; index < FRAMEBUFFER_WIDTH*FRAMEBUFFER_HEIGHT; index++){
+          if(index%FRAMEBUFFER_WIDTH > offset){
+             _framebuffer[index] = _transitionframeBuffer[index + (FRAMEBUFFER_WIDTH - offset)];
           }
+          else{
+            _framebuffer[index] = _frameBuffer[index - offset];
+          }
+
         }
       }
       if (transition_animation_type == TRANSITION_PUSH_RIGHT) {
@@ -142,11 +152,8 @@ void VirtualLCDDevice::DisplayFramebuffer() {
       transition_counter -= transition_animation_speed;
     }
   } else {
-    for (x = 0; x < FRAMEBUFFER_WIDTH; x++) {
-      for (y = 0; y < FRAMEBUFFER_HEIGHT; y++) {
-        //for (y=_height; y>0; y--) { // we flip y axis so the origin in the lower left corner
-        _framebuffer[y * FRAMEBUFFER_WIDTH + x] = _frameBuffer[(y) * FRAMEBUFFER_WIDTH + x];
-      }
-    }
+      for(int index = 0; index < FRAMEBUFFER_WIDTH*FRAMEBUFFER_HEIGHT; index++){
+            _framebuffer[index] = _frameBuffer[index];
+        }
   }
 }

@@ -3,15 +3,17 @@
 #include "Screens/IScreen.h"
 #include "TransitionDefinitions.h"
 
-MenuSystem::MenuSystem(IUSBDevice* usbDevice, CentralDB* centraldb) :
+
+MenuSystem::MenuSystem(IUSBDevice* usbDevice, CentralDB* centraldb, bool* transition_active) :
     _currentScreen(nullptr), _usbDevice(usbDevice), _mainPage(usbDevice), _MainMenu(usbDevice, centraldb),
     _settingsSubMenu1(usbDevice, centraldb), _whiteBalance(usbDevice),_db(centraldb)
 {
     InitializeAvailableScreens();
 
     SetCurrentScreen(AvailableScreens::MainPage);
-    _cur = (uint8_t)AvailableScreens::MainPage;
+    _cur = AvailableScreens::MainPage;
     _prev = _cur;
+    _transition_active = transition_active;
 }
 
 MenuSystem::~MenuSystem()
@@ -22,7 +24,7 @@ void MenuSystem::SetCurrentScreen(AvailableScreens menu)
 {   _prev = _cur;
     _currentScreenType = menu;
     _currentScreen = _availableScreens[(uint8_t)menu];
-    _cur = (uint8_t)menu;
+    _cur = menu;
 }
 
 AvailableScreens MenuSystem::GetCurrentScreen()
@@ -41,11 +43,8 @@ void MenuSystem::Draw(IPainter * painter) {
   if (_currentScreen == nullptr) {
     return;
   } else if (_cur != _prev) {
-    _db->SetUint32(Attribute::ID::TRANSITION_ANIMATION_SPEED, 60);
     painter -> SetTransitionFramebuffer();
-    _db -> SetBoolean(Attribute::ID::TRANSITION_ACTIVE, true);
-    _db -> SetUint32(Attribute::ID::TRANSITION_COUNTER, 255);
-    SetTransitionType();
+    *_transition_active = true;
     _prev = _cur;
   }
   painter -> Fill((uint16_t) _currentScreen -> GetBackgroundColor());
@@ -60,17 +59,17 @@ void MenuSystem::Update(Button button, int8_t knob) {
 
 void MenuSystem::SetTransitionType() {
   switch (_cur) {
-  case (uint8_t) AvailableScreens::MainPage:
-    _db -> SetInt32(Attribute::ID::TRANSITION_ANIMATION_TYPE, TRANSITION_PUSH_UP);
+  case AvailableScreens::MainPage:
+    _db -> SetInt32(Attribute::ID::TRANSITION_ANIMATION_TYPE, 0);
     break;
-  case (uint8_t) AvailableScreens::MainMenu:
-    _db -> SetInt32(Attribute::ID::TRANSITION_ANIMATION_TYPE, TRANSITION_PUSH_DOWN);
+  case AvailableScreens::MainMenu:
+    _db -> SetInt32(Attribute::ID::TRANSITION_ANIMATION_TYPE, 0);
     break;
-  case (uint8_t) AvailableScreens::SettingsSubMenu1:
-    _db -> SetInt32(Attribute::ID::TRANSITION_ANIMATION_TYPE, TRANSITION_PUSH_LEFT);
+  case AvailableScreens::SettingsSubMenu1:
+    _db -> SetInt32(Attribute::ID::TRANSITION_ANIMATION_TYPE, 0);
     break;
-  case (uint8_t) AvailableScreens::WhiteBalance:
-    _db -> SetInt32(Attribute::ID::TRANSITION_ANIMATION_TYPE, TRANSITION_PUSH_RIGHT);
+  case AvailableScreens::WhiteBalance:
+    _db -> SetInt32(Attribute::ID::TRANSITION_ANIMATION_TYPE, 0);
     break;
   default:
     break;

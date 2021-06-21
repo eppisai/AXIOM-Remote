@@ -9,11 +9,12 @@
 #define FRAMEBUFFER_WIDTH 320
 #define FRAMEBUFFER_HEIGHT 240
 
-ILI9341Display::ILI9341Display(volatile uint16_t* framebuffer, volatile uint16_t* transitionframebuffer, CentralDB* db)
+ILI9341Display::ILI9341Display(volatile uint16_t* framebuffer, volatile uint16_t* transitionframebuffer, bool* transition_active)
 {
     _framebuffer = framebuffer;
     _transitionframebuffer = transitionframebuffer;
-    _db = db;
+    _transition_active = transition_active;
+    
 }
 
 void ILI9341Display::SetupBacklightControl()
@@ -27,7 +28,7 @@ void ILI9341Display::SetupBacklightControl()
     // Output Compare 6 / PWM
     OC6CONbits.OCM = 0b110;
     OC6CONbits.OCTSEL = 1;
-//    OC6RS = backlight_linear_percentage[GlobalSettings::brightnessPercentage];
+    // OC6RS = backlight_linear_percentage[GlobalSettings::brightnessPercentage];
 
     // Switch OC6 and Timer 3 on
     T3CONbits.ON = 1;
@@ -388,15 +389,14 @@ void ILI9341Display::DisplayFramebuffer()
 
     LCDPumpCommand(ILI9341_RAMWR);
     
-    int x, y;
-  int transition_animation_type = _db -> GetUint32(Attribute::ID::TRANSITION_ANIMATION_TYPE);
-  int transition_animation_speed = _db -> GetUint32(Attribute::ID::TRANSITION_ANIMATION_SPEED);
-  int transition_counter = _db -> GetUint32(Attribute::ID::TRANSITION_COUNTER);
-  if (_db -> GetBoolean(Attribute::ID::TRANSITION_ACTIVE)) {
+  int x, y;
+  int transition_animation_type = 0;
+  int transition_animation_speed = 60;
+  int transition_counter = 255;
+  if (*_transition_active) {
     while (transition_counter > 0) {
       if (transition_counter <= transition_animation_speed - 1) {
-        _db -> SetBoolean(Attribute::ID::TRANSITION_ACTIVE, false);
-        _db -> SetUint32(Attribute::ID::TRANSITION_ACTIVE, 0);
+       *_transition_active = false;
       }
       if (transition_animation_type == TRANSITION_WIPE_RIGHT) {
 
@@ -437,18 +437,15 @@ void ILI9341Display::DisplayFramebuffer()
       if (transition_animation_type == TRANSITION_PUSH_LEFT) {
 
         uint16_t offset = (float)(transition_counter) / (float)(255) * FRAMEBUFFER_WIDTH;
-
-        for (x = 0; x < FRAMEBUFFER_WIDTH; x++) {
-          if (x <= offset) {
-            for (y = 0; y < FRAMEBUFFER_HEIGHT; y++) {
-              LCDPumpWrite(_transitionframebuffer[(x + (FRAMEBUFFER_WIDTH - offset)) + y * FRAMEBUFFER_WIDTH]);
+          for(int index = 0; index < _framebufferSize; index++){
+            if(index%FRAMEBUFFER_WIDTH > offset){
+              LCDPumpWrite(_transitionframebuffer[index + (FRAMEBUFFER_WIDTH - offset)]);
             }
-          } else {
-            for (y = 0; y < FRAMEBUFFER_HEIGHT; y++) {
-              LCDPumpWrite(_framebuffer[(x - offset) + y * FRAMEBUFFER_WIDTH]);
+            else{
+              LCDPumpWrite(_framebuffer[index - offset]);
             }
           }
-        }
+        
       }
       if (transition_animation_type == TRANSITION_PUSH_RIGHT) {
 
@@ -503,12 +500,10 @@ void ILI9341Display::DisplayFramebuffer()
       transition_counter -= transition_animation_speed;
     }
   } else {
-    for (x = 0; x < FRAMEBUFFER_WIDTH; x++) {
-      for (y = 0; y < FRAMEBUFFER_HEIGHT; y++) {
-        //for (y=_height; y>0; y--) { // we flip y axis so the origin in the lower left corner
-        LCDPumpWrite(_framebuffer[(y) * FRAMEBUFFER_WIDTH + x]);
-      }
-    }
+    for (uint32_t index = 0; index < _framebufferSize; index++)
+     {
+        LCDPumpWrite(_framebuffer[index]);
+     }
   }
 
     LCD_RSX_O = 0;

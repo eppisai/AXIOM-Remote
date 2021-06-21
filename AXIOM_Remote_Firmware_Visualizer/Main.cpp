@@ -163,7 +163,7 @@ int main(int argc, char* argv[])
     auto transitionframeBuffer = new uint16_t[FRAMEBUFFER_WIDTH * FRAMEBUFFER_HEIGHT];
     auto framebuffer = new uint16_t[FRAMEBUFFER_WIDTH * FRAMEBUFFER_HEIGHT];
     
-
+    bool transition_active = false;
     SDL_Window* window;
     SDL_GLContext glContext;
 
@@ -179,7 +179,7 @@ int main(int argc, char* argv[])
     texture_rect.w = FRAMEBUFFER_WIDTH * 4;  // the width of the texture
     texture_rect.h = FRAMEBUFFER_HEIGHT * 4; // the height of the texture
 
-    Painter painter(frameBuffer,transitionframeBuffer, FRAMEBUFFER_WIDTH, FRAMEBUFFER_HEIGHT);
+    Painter painter(frameBuffer, transitionframeBuffer, FRAMEBUFFER_WIDTH, FRAMEBUFFER_HEIGHT);
     CentralDB centralDB;
     centralDB.SetBoolean(Attribute::ID::TRANSITION_ACTIVE,false);
   #ifdef DEBUG_DRAW
@@ -189,7 +189,7 @@ int main(int argc, char* argv[])
 
     USBCDCTerminalDevice cdcDevice;
 
-    MenuSystem menuSystem(&cdcDevice, &centralDB);
+    MenuSystem menuSystem(&cdcDevice, &centralDB, &transition_active);
 
     Button button = Button::BUTTON_NONE;
 
@@ -225,7 +225,7 @@ int main(int argc, char* argv[])
  #endif
 
         menuSystem.Draw(&painter);
-        VirtualLCDDevice display(frameBuffer,transitionframeBuffer,framebuffer,&centralDB);
+        VirtualLCDDevice display(frameBuffer, transitionframeBuffer, framebuffer, &transition_active);
         display.DisplayFramebuffer();
 
         glBindTexture(GL_TEXTURE_2D, displayTextureID);

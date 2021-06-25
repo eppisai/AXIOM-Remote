@@ -7,7 +7,7 @@
 class ILCDDevice 
 { 
 public:
-  virtual void DisplayFramebuffer() = 0;
+  virtual void DisplayFramebuffer(bool& transitionActive) = 0;
 };
 
 #endif //ILCDDEVICE_H

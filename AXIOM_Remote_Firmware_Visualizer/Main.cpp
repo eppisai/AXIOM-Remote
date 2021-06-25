@@ -163,7 +163,7 @@ int main(int argc, char* argv[])
     auto transitionframeBuffer = new uint16_t[FRAMEBUFFER_WIDTH * FRAMEBUFFER_HEIGHT];
     auto framebuffer = new uint16_t[FRAMEBUFFER_WIDTH * FRAMEBUFFER_HEIGHT];
     
-    bool transition_active = false;
+    bool transitionActive = false;
     SDL_Window* window;
     SDL_GLContext glContext;
 
@@ -181,7 +181,7 @@ int main(int argc, char* argv[])
 
     Painter painter(frameBuffer, transitionframeBuffer, FRAMEBUFFER_WIDTH, FRAMEBUFFER_HEIGHT);
     CentralDB centralDB;
-    centralDB.SetBoolean(Attribute::ID::TRANSITION_ACTIVE,false);
+    // centralDB.SetBoolean(Attribute::ID::TRANSITIONCTIVE,false);
   #ifdef DEBUG_DRAW
     DebugPainter debugPainter;
     painter.SetDebugOverlay(&debugPainter);
@@ -189,7 +189,7 @@ int main(int argc, char* argv[])
 
     USBCDCTerminalDevice cdcDevice;
 
-    MenuSystem menuSystem(&cdcDevice, &centralDB, &transition_active);
+    MenuSystem menuSystem(&cdcDevice, &centralDB, transitionActive);
 
     Button button = Button::BUTTON_NONE;
 
@@ -202,7 +202,7 @@ int main(int argc, char* argv[])
         std::make_shared<VirtualUI>(window, displayTextureID, &centralDB, partialScreenshotHandler);
 
     centralDB.SetUint32(Attribute::ID::REMOTE_LCD_BRIGHTNESS, 75);
-    std::cout<<centralDB.GetBoolean(Attribute::ID::TRANSITION_ACTIVE)<<" \n";
+    // std::cout<<centralDB.GetBoolean(Attribute::ID::TRANSITION_ACTIVE)<<" \n";
 
     bool appIsRunning = true;
     const int frames = 60;
@@ -225,7 +225,7 @@ int main(int argc, char* argv[])
  #endif
 
         menuSystem.Draw(&painter);
-        VirtualLCDDevice display(frameBuffer, transitionframeBuffer, framebuffer, &transition_active);
+        VirtualLCDDevice display(frameBuffer, transitionframeBuffer, framebuffer, &transitionActive);
         display.DisplayFramebuffer();
 
         glBindTexture(GL_TEXTURE_2D, displayTextureID);

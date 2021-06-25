@@ -626,10 +626,7 @@ uint16_t Painter::ProcessByte(uint8_t data, uint16_t x, uint16_t xIndex, uint16_
 }
 
 void Painter::SetTransitionFramebuffer(){
-   int x,y;
-   for (x = 0; x < 320; x++) {
-            for (y = 0; y < 240; y++) {
-                _transitionframebuffer[y*320 + x] = _framebuffer[y*320+x];
-            }
-         } 
+   for (int i = 0; i < (_framebufferWidth * _framebufferHeight); i++) {    
+        _transitionframebuffer[i] = _framebuffer[i];
+    } 
 }

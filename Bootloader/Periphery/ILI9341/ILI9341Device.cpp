@@ -9,11 +9,11 @@
 #define FRAMEBUFFER_WIDTH 320
 #define FRAMEBUFFER_HEIGHT 240
 
-ILI9341Display::ILI9341Display(volatile uint16_t* framebuffer, volatile uint16_t* transitionframebuffer, bool* transition_active)
+ILI9341Display::ILI9341Display(volatile uint16_t* framebuffer, volatile uint16_t* transitionframebuffer, bool& transitionActive)
 {
     _framebuffer = framebuffer;
     _transitionframebuffer = transitionframebuffer;
-    _transition_active = transition_active;
+    _transitionActive = transitionActive;
     
 }
 
@@ -390,53 +390,19 @@ void ILI9341Display::DisplayFramebuffer()
     LCDPumpCommand(ILI9341_RAMWR);
     
   int x, y;
-  int transition_animation_type = 0;
-  int transition_animation_speed = 60;
-  int transition_counter = 255;
-  if (*_transition_active) {
-    while (transition_counter > 0) {
-      if (transition_counter <= transition_animation_speed - 1) {
-       *_transition_active = false;
+  int transitionAnimationType = 0;
+  int transitionAnimationSpeed = 60;
+  int transitionCounter = 255;
+  if (_transitionActive) {
+    while (transitionCounter > 0) {
+      if (transitionCounter <= transitionAnimationSpeed - 1) {
+       _transitionActive = false;
       }
-      if (transition_animation_type == TRANSITION_WIPE_RIGHT) {
 
-        float ratio = fabs(((float)(transition_counter) / 255) - 1);
 
-        for (x = 0; x < FRAMEBUFFER_WIDTH; x++) {
-          float horizontal_progress = (float)(x) / (float)(FRAMEBUFFER_WIDTH);
+      if (transitionAnimationType == TRANSITION_PUSH_LEFT) {
 
-          if (horizontal_progress < ratio) {
-            for (y = 0; y < FRAMEBUFFER_HEIGHT; y++) {
-              LCDPumpWrite(_framebuffer[x + y * FRAMEBUFFER_WIDTH]);
-            }
-          } else {
-            for (y = 0; y < FRAMEBUFFER_HEIGHT; y++) {
-              LCDPumpWrite(_transitionframebuffer[x + y * FRAMEBUFFER_WIDTH]);
-            }
-          }
-        }
-      }
-      if (transition_animation_type == TRANSITION_WIPE_LEFT) {
-
-        float ratio = ((float)(transition_counter) / 255);
-
-        for (x = 0; x < FRAMEBUFFER_WIDTH; x++) {
-          float horizontal_progress = (float)(x) / (float)(FRAMEBUFFER_WIDTH);
-
-          if (horizontal_progress > ratio) {
-            for (y = 0; y < FRAMEBUFFER_HEIGHT; y++) {
-              LCDPumpWrite(_framebuffer[x + y * FRAMEBUFFER_WIDTH]);
-            }
-          } else {
-            for (y = 0; y < FRAMEBUFFER_HEIGHT; y++) {
-              LCDPumpWrite(_transitionframebuffer[x + y * FRAMEBUFFER_WIDTH]);
-            }
-          }
-        }
-      }
-      if (transition_animation_type == TRANSITION_PUSH_LEFT) {
-
-        uint16_t offset = (float)(transition_counter) / (float)(255) * FRAMEBUFFER_WIDTH;
+        uint16_t offset = (float)(transitionCounter) / (float)(255) * FRAMEBUFFER_WIDTH;
           for(int index = 0; index < _framebufferSize; index++){
             if(index%FRAMEBUFFER_WIDTH > offset){
               LCDPumpWrite(_transitionframebuffer[index + (FRAMEBUFFER_WIDTH - offset)]);
@@ -447,57 +413,8 @@ void ILI9341Display::DisplayFramebuffer()
           }
         
       }
-      if (transition_animation_type == TRANSITION_PUSH_RIGHT) {
 
-        uint16_t offset = fabs((float)(transition_counter) / (float)(255) - 1) * FRAMEBUFFER_WIDTH;
-
-        for (x = 0; x < FRAMEBUFFER_WIDTH; x++) {
-          //uint16_t horizontal_progress = (float) (x) / (float) (_width);
-
-          if (x > offset) {
-            //if (((x - offset) < _width) && ((x - offset) >= 0)) {
-            for (y = 0; y < FRAMEBUFFER_HEIGHT; y++) {
-              LCDPumpWrite(_transitionframebuffer[x - offset + y * FRAMEBUFFER_WIDTH]);
-            }
-            //}
-          } else {
-            // if ((((x + (_width - offset)) >= 0) && (x + (_width - offset)) < _width)) {
-            for (y = 0; y < FRAMEBUFFER_HEIGHT; y++) {
-              LCDPumpWrite(_framebuffer[(x + (FRAMEBUFFER_WIDTH - offset)) + y * FRAMEBUFFER_WIDTH]);
-            }
-            //}
-          }
-        }
-      }
-      if (transition_animation_type == TRANSITION_PUSH_UP) {
-
-        uint16_t offset = (float)(transition_counter) / (float)(255) * FRAMEBUFFER_HEIGHT;
-
-        for (x = 0; x < FRAMEBUFFER_WIDTH; x++) {
-          for (y = 0; y < FRAMEBUFFER_HEIGHT; y++) {
-            if (y <= offset) {
-              LCDPumpWrite(_transitionframebuffer[x + (y + (FRAMEBUFFER_HEIGHT - offset)) * FRAMEBUFFER_WIDTH]);
-            } else {
-              LCDPumpWrite(_framebuffer[x + (y - offset) * FRAMEBUFFER_WIDTH]);
-            }
-          }
-        }
-      }
-      if (transition_animation_type == TRANSITION_PUSH_DOWN) {
-        uint16_t offset = fabs(((float)(transition_counter) / (float)(255) - 1) * FRAMEBUFFER_HEIGHT);
-
-        for (x = 0; x < FRAMEBUFFER_WIDTH; x++) {
-          for (y = 0; y < FRAMEBUFFER_HEIGHT; y++) {
-            if (y > offset) {
-              LCDPumpWrite(_transitionframebuffer[x + (y - offset) * FRAMEBUFFER_WIDTH]);
-            } else {
-              LCDPumpWrite(_framebuffer[x + (y + (FRAMEBUFFER_HEIGHT - offset)) * FRAMEBUFFER_WIDTH]);
-            }
-          }
-        }
-
-      }
-      transition_counter -= transition_animation_speed;
+      transitionCounter -= transitionAnimationSpeed;
     }
   } else {
     for (uint32_t index = 0; index < _framebufferSize; index++)

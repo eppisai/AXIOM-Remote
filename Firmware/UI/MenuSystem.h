@@ -35,14 +35,14 @@ class MenuSystem : public IMenuSystem
     MainMenu _MainMenu;
     SettingsSubMenu1 _settingsSubMenu1;
     WhiteBalanceScreen _whiteBalance;
-    bool* _transition_active;
+    bool* _transitionActive;
     void InitializeAvailableScreens();
 
   public:
-    explicit MenuSystem(IUSBDevice* usbDevice, CentralDB* centraldb, bool* transition_active);
+    explicit MenuSystem(IUSBDevice* usbDevice, CentralDB* centraldb, bool* transitionActive);
     virtual ~MenuSystem();
     
-    void SetTransitionType();
+    // void SetTransitionType();
     void SetCurrentScreen(AvailableScreens menu) override;
     AvailableScreens GetCurrentScreen();
 

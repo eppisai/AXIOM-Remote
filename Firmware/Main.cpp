@@ -28,10 +28,6 @@
 volatile extern uint16_t framebuffer[ILI9341_TFTWIDTH * ILI9341_TFTHEIGHT];
 volatile extern uint16_t transitionframebuffer[ILI9341_TFTWIDTH * ILI9341_TFTHEIGHT];
 
-CentralDB centralDB;
-bool transition_active = false;
-ILI9341Display display(framebuffer, transitionframebuffer, &transition_active);
-
 void ConfigGPIO()
 {
     // Enable pull-up resistor for E9 to prevent UANT RX interferences
@@ -538,7 +534,9 @@ void init_uart2()
 int main()
 {   
     USBCDCDevice cdcDevice;
-
+    CentralDB centralDB;
+    bool transitionActive = false;
+    ILI9341Display display(framebuffer, transitionframebuffer, transitionActive);
     Setup(display, cdcDevice);
 
     CentralDBObserver lcdObserver(Attribute::ID::REMOTE_LCD_BRIGHTNESS, [](const CentralDB& db) {
@@ -552,7 +550,7 @@ int main()
 
     display.SetBacklight(50);
 
-    MenuSystem menuSystem(&cdcDevice, &centralDB, &transition_active);
+    MenuSystem menuSystem(&cdcDevice, &centralDB, &transitionActive);
 
     Painter generalPainter(display.GetFramebuffer(), display.GetTransitionFramebuffer(), display.GetWidth(), display.GetHeight());
     IPainter* painter = &generalPainter;

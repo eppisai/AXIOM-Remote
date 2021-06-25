@@ -15,25 +15,24 @@
 #define FRAMEBUFFER_WIDTH 320
 #define FRAMEBUFFER_HEIGHT 240
 
-VirtualLCDDevice::VirtualLCDDevice(volatile uint16_t * frameBuffer, volatile uint16_t * transitionframeBuffer, volatile uint16_t * framebuffer,bool& transitionActive) {
+VirtualLCDDevice::VirtualLCDDevice(volatile uint16_t * frameBuffer, volatile uint16_t * transitionframeBuffer, volatile uint16_t * framebuffer) {
   _frameBuffer = frameBuffer;
   _transitionframeBuffer = transitionframeBuffer;
   _framebuffer = framebuffer;
-  _transitionActive = transitionActive;
 
 }
 
-void VirtualLCDDevice::DisplayFramebuffer() {
+void VirtualLCDDevice::DisplayFramebuffer(bool& transitionActive) {
   int x, y;
   int transitionAnimationType = 0;
   int transitionAnimationSpeed = 60;
   int transitionCounter = 255;
   // int transition_animation_speed = 2;
-  if (_transitionActive) {
+  if (transitionActive) {
     while (transitionCounter > 0) {
       std::cout << "transition speed    " << transitionAnimationSpeed << std::endl;
       if (transitionCounter <= transitionAnimationSpeed - 1) {
-        _transitionActive = false;
+        transitionActive = false;
         std::cout << "transition active false" << std::endl;
       }
       std::cout << transitionAnimationType << "\n";

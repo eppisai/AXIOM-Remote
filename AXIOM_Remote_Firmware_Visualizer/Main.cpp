@@ -189,7 +189,7 @@ int main(int argc, char* argv[])
 
     USBCDCTerminalDevice cdcDevice;
 
-    MenuSystem menuSystem(&cdcDevice, &centralDB, transitionActive);
+    MenuSystem menuSystem(&cdcDevice, &centralDB);
 
     Button button = Button::BUTTON_NONE;
 
@@ -224,9 +224,9 @@ int main(int argc, char* argv[])
         debugPainter.SetEnable(debugOverlayEnabled);
  #endif
 
-        menuSystem.Draw(&painter);
-        VirtualLCDDevice display(frameBuffer, transitionframeBuffer, framebuffer, transitionActive);
-        display.DisplayFramebuffer();
+        menuSystem.Draw(&painter, transitionActive);
+        VirtualLCDDevice display(frameBuffer, transitionframeBuffer, framebuffer);
+        display.DisplayFramebuffer(transitionActive);
 
         glBindTexture(GL_TEXTURE_2D, displayTextureID);
         glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, FRAMEBUFFER_WIDTH, FRAMEBUFFER_HEIGHT, GL_RGB, GL_UNSIGNED_SHORT_5_6_5,

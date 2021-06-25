@@ -19,17 +19,10 @@
 
 #include "../../GlobalSettings.h"
 
-<<<<<<< HEAD
-#include "../../../Bootloader/Periphery/USB/IUSBDevice.h"
-#include "../../CentralDB.h"
-
-//#include <Helpers.h>
-=======
 #include "../../CentralDB/CentralDB.h"
 
 class IUSBDevice;
 class ILI9341Device;
->>>>>>> 1dd1923149f7e656df6ed85d9db7bf6f6513e373
 
 class Menu : public IMenu
 {

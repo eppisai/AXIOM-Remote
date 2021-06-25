@@ -4,7 +4,7 @@
 #include "TransitionDefinitions.h"
 
 
-MenuSystem::MenuSystem(IUSBDevice* usbDevice, CentralDB* centraldb, bool* transitionActive) :
+MenuSystem::MenuSystem(IUSBDevice* usbDevice, CentralDB* centraldb) :
     _currentScreen(nullptr), _usbDevice(usbDevice), _mainPage(usbDevice), _MainMenu(usbDevice, centraldb),
     _settingsSubMenu1(usbDevice, centraldb), _whiteBalance(usbDevice),_db(centraldb)
 {
@@ -13,7 +13,6 @@ MenuSystem::MenuSystem(IUSBDevice* usbDevice, CentralDB* centraldb, bool* transi
     SetCurrentScreen(AvailableScreens::MainPage);
     _cur = AvailableScreens::MainPage;
     _prev = _cur;
-    _transitionActive = transitionActive;
 }
 
 MenuSystem::~MenuSystem()
@@ -38,12 +37,12 @@ void MenuSystem::InitializeAvailableScreens()
     _availableScreens[2] = &_settingsSubMenu1;
     _availableScreens[3] = &_whiteBalance;
 }
-void MenuSystem::Draw(IPainter * painter) {
+void MenuSystem::Draw(IPainter * painter, bool& transitionActive) {
   if (_currentScreen == nullptr) {
     return;
   } else if (_cur != _prev) {
     painter -> SetTransitionFramebuffer();
-    *_transitionActive = true;
+    transitionActive = true;
     _prev = _cur;
   }
   painter -> Fill((uint16_t) _currentScreen -> GetBackgroundColor());

@@ -536,7 +536,7 @@ int main()
     USBCDCDevice cdcDevice;
     CentralDB centralDB;
     bool transitionActive = false;
-    ILI9341Display display(framebuffer, transitionframebuffer, transitionActive);
+    ILI9341Display display(framebuffer, transitionframebuffer);
     Setup(display, cdcDevice);
 
     CentralDBObserver lcdObserver(Attribute::ID::REMOTE_LCD_BRIGHTNESS, [](const CentralDB& db) {
@@ -550,7 +550,7 @@ int main()
 
     display.SetBacklight(50);
 
-    MenuSystem menuSystem(&cdcDevice, &centralDB, &transitionActive);
+    MenuSystem menuSystem(&cdcDevice, &centralDB);
 
     Painter generalPainter(display.GetFramebuffer(), display.GetTransitionFramebuffer(), display.GetWidth(), display.GetHeight());
     IPainter* painter = &generalPainter;
@@ -588,7 +588,7 @@ int main()
 
         menuSystem.Update(PollButtons(&cdcDevice), PollKMW(&cdcDevice));
 
-        menuSystem.Draw(painter);
+        menuSystem.Draw(painter, transitionActive);
 
         counter++;
         sprintf(debugText, "%d\r\n", counter);
@@ -611,7 +611,7 @@ int main()
 
         // cdcDevice.Send((uint8_t*)debugText, 10);
 
-        display.DisplayFramebuffer();
+        display.DisplayFramebuffer(transitionActive);
 
         // DelayMs(30);
     }

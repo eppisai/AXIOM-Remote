@@ -9,11 +9,10 @@
 #define FRAMEBUFFER_WIDTH 320
 #define FRAMEBUFFER_HEIGHT 240
 
-ILI9341Display::ILI9341Display(volatile uint16_t* framebuffer, volatile uint16_t* transitionframebuffer, bool& transitionActive)
+ILI9341Display::ILI9341Display(volatile uint16_t* framebuffer, volatile uint16_t* transitionframebuffer)
 {
     _framebuffer = framebuffer;
     _transitionframebuffer = transitionframebuffer;
-    _transitionActive = transitionActive;
     
 }
 
@@ -379,7 +378,7 @@ void ILI9341Display::Initialize()
 //    LCDPumpCommand(ILI9341_RAMWR); // write to RAM
 //}
 
-void ILI9341Display::DisplayFramebuffer()
+void ILI9341Display::DisplayFramebuffer(bool& transitionActive)
 {
     while (!LCD_TE_I);
     while (LCD_TE_I);
@@ -393,10 +392,10 @@ void ILI9341Display::DisplayFramebuffer()
   int transitionAnimationType = 0;
   int transitionAnimationSpeed = 60;
   int transitionCounter = 255;
-  if (_transitionActive) {
+  if (transitionActive) {
     while (transitionCounter > 0) {
       if (transitionCounter <= transitionAnimationSpeed - 1) {
-       _transitionActive = false;
+       transitionActive = false;
       }
 
 

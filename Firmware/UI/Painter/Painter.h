@@ -25,8 +25,8 @@ class Painter : public IPainter
     IDebugPainter* _debugPainter;
 
   protected:
-    volatile uint16_t* _framebuffer;
-    volatile uint16_t* _transitionframebuffer;
+    volatile uint16_t* _frontFramebuffer;
+    volatile uint16_t* _backFramebuffer;
     uint16_t _framebufferWidth;
     uint16_t _framebufferHeight;
 
@@ -71,7 +71,6 @@ class Painter : public IPainter
                           uint16_t textblockwidth) override;
     uint16_t GetStringFramebufferWidth(const char* str) override;
     uint8_t GetCurrentFontHeight() override;
-    void SetTransitionFramebuffer() override;
 };
 
 #endif /* PAINTER_H */

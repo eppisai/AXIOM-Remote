@@ -41,7 +41,6 @@ void MenuSystem::Draw(IPainter * painter, bool& transitionActive) {
   if (_currentScreen == nullptr) {
     return;
   } else if (_cur != _prev) {
-    painter -> SetTransitionFramebuffer();
     transitionActive = true;
     _prev = _cur;
   }

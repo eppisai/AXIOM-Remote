@@ -53,7 +53,6 @@ class IPainter
                           uint16_t textblockwidth) = 0;
     virtual uint16_t GetStringFramebufferWidth(const char* str) = 0;
     virtual uint8_t GetCurrentFontHeight() = 0;
-    virtual void SetTransitionFramebuffer() = 0;
 };
 
 #endif /* PAINTER_H */

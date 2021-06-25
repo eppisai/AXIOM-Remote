@@ -21,7 +21,7 @@
 
 Painter::Painter(volatile uint16_t* framebuffer,volatile uint16_t* transitionframebuffer, uint16_t framebufferWidth, uint8_t framebufferHeight) :
     _fontList{FreeSans9pt7b, FreeSans12pt7b, FreeSans18pt7b, FreeSans24pt7b}, _currentFont(FreeSans9pt7b),
-    _currentFontHeight(13), _cursorX(0), _cursorY(0), _debugPainter(nullptr), _framebuffer(framebuffer), _transitionframebuffer(transitionframebuffer),
+    _currentFontHeight(13), _cursorX(0), _cursorY(0), _debugPainter(nullptr), _frontFramebuffer(framebuffer), _backFramebuffer(transitionframebuffer),
     _framebufferWidth(framebufferWidth), _framebufferHeight(framebufferHeight)
 {
     // Default font
@@ -589,7 +589,7 @@ void Painter::DrawPixel(uint16_t x, uint16_t y, uint16_t color)
     // Prevent drawing outside of bounds
     if (x < _framebufferWidth && y < _framebufferHeight)
     {
-        _framebuffer[y * _framebufferWidth + x] = color;
+        _frontFramebuffer[y * _framebufferWidth + x] = color;
     }
 }
 
@@ -603,7 +603,7 @@ void Painter::Dim()
     for (int i = 0; i < _framebufferWidth * _framebufferHeight; i++)
     {
         // half the brightness: set LSB of each color schannel 0 and shiftright once
-        _framebuffer[i] = (_framebuffer[i] & 0xF7DE) >> 1;
+        _frontFramebuffer[i] = (_frontFramebuffer[i] & 0xF7DE) >> 1;
     }
 }
 
@@ -622,10 +622,4 @@ uint16_t Painter::ProcessByte(uint8_t data, uint16_t x, uint16_t xIndex, uint16_
     }
 
     return xIndex;
-}
-
-void Painter::SetTransitionFramebuffer(){
-   for (int i = 0; i < (_framebufferWidth * _framebufferHeight); i++) {    
-        _transitionframebuffer[i] = _framebuffer[i];
-    } 
 }

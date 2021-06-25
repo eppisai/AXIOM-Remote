@@ -11,7 +11,7 @@
 #include <stdint.h>
 
 #include "LCDDefinitions.h"
-#include "../../../Firmware/CentralDB.h"
+#include "../../../Firmware/CentralDB/CentralDB.h"
 #include "../../../Firmware/UI/TransitionDefinitions.h"
 #include "ILCDDevice.h"
 

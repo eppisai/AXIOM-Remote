@@ -7,20 +7,24 @@ jobs:
   build:
     docker:
       - image: bandit1983/xc32_ubuntu:latest
+    environment:
+      MP_CC: /opt/microchip/xc32/v3.00/bin/xc32-gcc
+      MP_CC_DIR: /opt/microchip/xc32/v3.00/bin/      
     steps:
       - checkout
       - run:
-          name: Build
+          name: Build firmware
           command: |
-            export MP_CC="/opt/microchip/xc32/v2.50/bin/xc32-gcc" 
-            export MP_CC_DIR="/opt/microchip/xc32/v2.50/bin/"
-            mkdir /tmp/artifacts
             cd Firmware
             make -j8
-            cd ..
+      - run:
+          name: Build bootloader
+          command: |
             cd Bootloader
             make -j8
-            cd ..
+      - run:
+          name: Create artifact folder
+          command: mkdir /tmp/artifacts
       - run:
           name: Copy firmware artifacts
           command: |

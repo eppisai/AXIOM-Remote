@@ -19,10 +19,10 @@
 
 #include "../../GlobalSettings.h"
 
-#include "../../../Bootloader/Periphery/USB/IUSBDevice.h"
-#include "../../CentralDB.h"
+#include "../../CentralDB/CentralDB.h"
 
-//#include <Helpers.h>
+class IUSBDevice;
+class ILI9341Device;
 
 class Menu : public IMenu
 {
@@ -68,10 +68,10 @@ class Menu : public IMenu
 
   public:
     // TODO: Add assignment of menu system to IMenu
-    explicit Menu(IUSBDevice* cdcDevice, CentralDB* centraldb) :
+    explicit Menu(IUSBDevice* cdcDevice, CentralDB* centralDB) :
         IMenu(cdcDevice), _menuItemsCount(0), _menuSelectionIndex(0), _maxVisibleItems(7), _popUpParameterMenu(10, 10),
-        _parameterListScreen(cdcDevice), _numericValueScreen(cdcDevice), _db(centraldb),
-        _selectionButtonBeingPressed(false)
+        _parameterListScreen(cdcDevice), _numericValueScreen(cdcDevice), _selectionButtonBeingPressed(false),
+        _db(centralDB)
     {
         // UNUSED(cdcDevice);
         //_usbDevice = cdcDevice;

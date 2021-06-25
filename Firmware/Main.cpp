@@ -5,6 +5,7 @@
 #include "Periphery/ILI9341/ILI9341Device.h"
 #include "Periphery/USB/USBCDCDevice.h"
 #include "Periphery/I2C/I2C.h"
+#include "Periphery/UART/UART.h"
 
 // Menus/Pages
 #include "UI/MenuSystem.h"
@@ -540,6 +541,14 @@ int main()
     USBCDCDevice cdcDevice;
     Setup(display, cdcDevice);
 
+    UART uart;
+    uart.Initialize(921600);
+
+    // CAUTION: Exception trigger (division-by-zero)
+    // int i = 0;
+    // int b = 6 / i;
+
+    CentralDB centralDB;
     CentralDBObserver lcdObserver(Attribute::ID::REMOTE_LCD_BRIGHTNESS, [](const CentralDB& db) {
         uint32_t backlightPercentage = db.GetUint32(Attribute::ID::REMOTE_LCD_BRIGHTNESS);
         display.SetBacklight(backlightPercentage);
@@ -580,7 +589,7 @@ int main()
     //     LCD_BLT_O = !LCD_BLT_O;
     // }
 
-    init_uart2();
+    // init_uart2();
 
     uint16_t counter = 0;
     while (1)

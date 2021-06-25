@@ -225,7 +225,7 @@ int main(int argc, char* argv[])
  #endif
 
         menuSystem.Draw(&painter);
-        VirtualLCDDevice display(frameBuffer, transitionframeBuffer, framebuffer, &transitionActive);
+        VirtualLCDDevice display(frameBuffer, transitionframeBuffer, framebuffer, transitionActive);
         display.DisplayFramebuffer();
 
         glBindTexture(GL_TEXTURE_2D, displayTextureID);

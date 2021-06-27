@@ -1,6 +1,8 @@
 // Configuration
 #include "../Bootloader/Configuration/PIC32.h"
-
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/attribs.h>
 // Periphery
 #include "../Bootloader/Periphery/ILI9341/ILI9341Device.h"
 #include "../Bootloader/Periphery/USB/USBCDCDevice.h"
@@ -63,6 +65,45 @@ void SetupInterrupts()
 
     // cacheable, non-coherent, write-back, alloc
     __builtin_mtc0(_CP0_CONFIG, 0, 0b011);
+}
+
+
+/*Function Timer 1 Initialization
+ * parameter: void
+ * return: void 
+ */
+void Timer1_Init(void)
+{
+    //Timer1 Initialization
+    T1CONCLR=_T1CON_TCS_MASK | _T1CON_TGATE_MASK; // Internal clock, Gate accummulation off
+    //_T1CON_TCS_MASK - 0x00000002 and _T1CON_TGATE_MASK -  0x00000080
+    T1CONbits.TCKPS=3; // 0- 1:1 Prescaler,1- 1:8 Prescaler, 2- 1:64 Prescaler, 3- 1:256 Prescaler
+    TMR1=0;
+    PR1=62500; // 0.1 sec at 1:256, maximum for 16-bit timer, 2^16 -1
+    
+    //Timer 1 Interrupt
+    INTCONSET=_INTCON_MVEC_MASK;
+    IFS0CLR=_IFS0_T1IF_MASK; // Clear Timer1 interrupt flag
+    IPC1bits.T1IP=7;
+    IPC1bits.T1IS=1;    
+    IEC0SET=_IEC0_T1IE_MASK; // Enable Timer1 Interrupt
+    T1CONSET=_T1CON_TON_MASK; // Timer1 ON
+}
+
+
+//ISR
+extern "C" {void __ISR(4, ipl7) Timer1_isr(void)
+{
+    static uint8_t count=0;    
+    count++;
+    if(count==5)
+    {
+        LATDINV = _LATD_LATD0_MASK;
+        count=0;
+    }
+    IFS0CLR=_IFS0_T1IF_MASK; //clear flag
+   
+}
 }
 
 void init_icsp_w(void)
@@ -535,6 +576,9 @@ int main()
 {
     USBCDCDevice cdcDevice;
 
+    Timer1_Init();
+    __builtin_enable_interrupts();//Enable global Interrupt
+
     Setup(display, cdcDevice);
 
     CentralDB centralDB;
@@ -617,3 +661,4 @@ int main()
 
     return 0;
 }
+

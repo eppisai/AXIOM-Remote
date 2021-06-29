@@ -36,7 +36,7 @@ class ILI9341Display // : public ILCDDevice
     //    void SetOrientation(uint16_t x, uint16_t y, uint16_t w, uint16_t h);
 
   public:
-    explicit ILI9341Display(volatile uint16_t* framebuffer, volatile uint16_t transitionFramebuffer);
+    explicit ILI9341Display(volatile uint16_t* framebuffer, volatile uint16_t* transitionFramebuffer);
 
     uint16_t GetWidth()
     {

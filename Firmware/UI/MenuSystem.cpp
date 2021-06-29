@@ -2,6 +2,7 @@
 
 #include "Painter/IPainter.h"
 #include "Screens/IScreen.h"
+// #include <iostream>
 
 
 MenuSystem::MenuSystem(IUSBDevice* usbDevice, CentralDB* centraldb) :
@@ -11,6 +12,8 @@ MenuSystem::MenuSystem(IUSBDevice* usbDevice, CentralDB* centraldb) :
     InitializeAvailableScreens();
 
     SetCurrentScreen(AvailableScreens::MainPage);
+    _currentlyDisplayedScreen = AvailableScreens::MainPage;
+    _previouslyDisplayedScreen = _currentlyDisplayedScreen;
 }
 
 MenuSystem::~MenuSystem()
@@ -21,6 +24,16 @@ void MenuSystem::SetCurrentScreen(AvailableScreens menu)
 {
     _currentScreenType = menu;
     _currentScreen = _availableScreens[(uint8_t)menu];
+    _currentlyDisplayedScreen = menu;
+    // std::cout<<"screen changed\n";
+}
+
+bool MenuSystem::CheckTransitionStatus(){
+   if (_currentlyDisplayedScreen != _previouslyDisplayedScreen) {
+       _previouslyDisplayedScreen = _currentlyDisplayedScreen;  
+       return true;
+   } 
+   return false;
 }
 
 AvailableScreens MenuSystem::GetCurrentScreen()

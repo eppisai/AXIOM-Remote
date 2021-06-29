@@ -22,6 +22,7 @@
 
 #include "UI/MenuSystem.h"
 #include "UI/Painter/Painter.h"
+#include "VirtualLCDDevice.h"
 
 // Debug
 #define DEBUG_DRAW
@@ -158,8 +159,11 @@ int main(int argc, char* argv[])
 
     ProcessCommandLine(argc, argv);
 
-    auto frameBuffer = new uint16_t[FRAMEBUFFER_WIDTH * FRAMEBUFFER_HEIGHT];
+    auto framebuffer = new uint16_t[FRAMEBUFFER_WIDTH * FRAMEBUFFER_HEIGHT];
+    auto transitionFramebuffer = new uint16_t[FRAMEBUFFER_WIDTH * FRAMEBUFFER_HEIGHT];
+    auto virtualFramebuffer = new uint16_t[FRAMEBUFFER_WIDTH * FRAMEBUFFER_HEIGHT];
 
+    bool transitionActive = false;
     SDL_Window* window;
     SDL_GLContext glContext;
 
@@ -175,7 +179,7 @@ int main(int argc, char* argv[])
     texture_rect.w = FRAMEBUFFER_WIDTH * 4;  // the width of the texture
     texture_rect.h = FRAMEBUFFER_HEIGHT * 4; // the height of the texture
 
-    Painter painter(frameBuffer, FRAMEBUFFER_WIDTH, FRAMEBUFFER_HEIGHT);
+    Painter painter(framebuffer, FRAMEBUFFER_WIDTH, FRAMEBUFFER_HEIGHT);
 
 #ifdef DEBUG_DRAW
     DebugPainter debugPainter;
@@ -193,7 +197,7 @@ int main(int argc, char* argv[])
     int8_t knobValue = 0;
     bool debugOverlayEnabled = false;
 
-    auto partialScreenshotHandler = std::bind(ScreenshotHandler, frameBuffer, FRAMEBUFFER_WIDTH, FRAMEBUFFER_HEIGHT);
+    auto partialScreenshotHandler = std::bind(ScreenshotHandler, framebuffer, FRAMEBUFFER_WIDTH, FRAMEBUFFER_HEIGHT);
 
     std::shared_ptr<VirtualUI> virtualUI =
         std::make_shared<VirtualUI>(window, displayTextureID, &centralDB, partialScreenshotHandler);
@@ -203,6 +207,8 @@ int main(int argc, char* argv[])
     bool appIsRunning = true;
     const int frames = 60;
     SDL_Event events;
+    VirtualLCDDevice display(framebuffer, transitionFramebuffer, virtualFramebuffer);
+    bool framebufferSelection = true;
     while (appIsRunning)
     {
         while (SDL_PollEvent(&events))
@@ -216,22 +222,36 @@ int main(int argc, char* argv[])
 
         glClear(GL_COLOR_BUFFER_BIT);
 
-#ifdef DEBUG_DRAW
-        debugPainter.SetEnable(debugOverlayEnabled);
-#endif
+        #ifdef DEBUG_DRAW
+                debugPainter.SetEnable(debugOverlayEnabled);
+        #endif
 
-        menuSystem.Draw(&painter);
-
-        glBindTexture(GL_TEXTURE_2D, displayTextureID);
-        glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, FRAMEBUFFER_WIDTH, FRAMEBUFFER_HEIGHT, GL_RGB, GL_UNSIGNED_SHORT_5_6_5,
-                        frameBuffer);
-        glBindTexture(GL_TEXTURE_2D, 0);
 
         button = Button::BUTTON_NONE;
         virtualUI->RenderUI(button, knobValue, debugOverlayEnabled);
 
         menuSystem.Update(button, knobValue);
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        
+        if(menuSystem.CheckTransitionStatus()){
+            if(framebufferSelection){
+              painter.SetFrontFramebuffer(transitionFramebuffer);
+              display.SetActiveFramebuffer(transitionFramebuffer, framebuffer);
+              framebufferSelection = !framebufferSelection;
+            }
+            else{
+              painter.SetFrontFramebuffer(framebuffer);  
+              display.SetActiveFramebuffer(framebuffer, transitionFramebuffer);
+            }
+            transitionActive = true;
+        }
+        menuSystem.Draw(&painter);
+        display.DisplayFramebuffer(transitionActive);
+
+        glBindTexture(GL_TEXTURE_2D, displayTextureID);
+        glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, FRAMEBUFFER_WIDTH, FRAMEBUFFER_HEIGHT, GL_RGB, GL_UNSIGNED_SHORT_5_6_5,
+                        virtualFramebuffer);
+        glBindTexture(GL_TEXTURE_2D, 0);
 
         SDL_GL_SwapWindow(window);
 

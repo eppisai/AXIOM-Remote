@@ -21,8 +21,11 @@ class ILI9341Display // : public ILCDDevice
     static const uint32_t _framebufferSize = ILI9341_TFTWIDTH * ILI9341_TFTHEIGHT;
     //_framebuffer(new uint16_t(_framebufferSize))
 
-    volatile uint16_t* _framebuffer; //[_framebufferSize];
+    volatile uint16_t* _frontFramebuffer; //[_framebufferSize];
     // uint16_t _framebuffer[320 * 240];
+    volatile uint16_t* _backFramebuffer;
+    int _transitionAnimationSpeed = 60;
+    int _transitionCounter = 255;
 
     unsigned ReadPMP(void);
     unsigned ReadFPMP(void);
@@ -33,7 +36,7 @@ class ILI9341Display // : public ILCDDevice
     //    void SetOrientation(uint16_t x, uint16_t y, uint16_t w, uint16_t h);
 
   public:
-    explicit ILI9341Display(volatile uint16_t* framebuffer);
+    explicit ILI9341Display(volatile uint16_t* framebuffer, volatile uint16_t transitionFramebuffer);
 
     uint16_t GetWidth()
     {
@@ -46,10 +49,11 @@ class ILI9341Display // : public ILCDDevice
     }
 
     volatile uint16_t* GetFramebuffer();
+    void SetActiveFramebuffer(volatile uint16_t* frontFramebuffer,volatile uint16_t* backFramebuffer); 
     void ClearFramebuffer(uint16_t color);
     void UpdateFramebuffer();
 
-    void DisplayFramebuffer();
+    void DisplayFramebuffer(bool& transitionActive);
 
     void SetupBacklightControl();
     void SetBacklight(uint8_t percentage);

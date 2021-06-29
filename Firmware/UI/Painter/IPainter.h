@@ -40,6 +40,7 @@ class IPainter
                                        uint16_t color) = 0;
 
     // Misc
+    virtual void SetFrontFramebuffer(volatile uint16_t* frontFramebuffer) = 0;
     virtual void DrawImage(const uint8_t* data, uint16_t x, uint16_t y, uint16_t width, uint16_t height) = 0;
     virtual void DrawPixel(uint16_t x, uint16_t y, uint16_t color) = 0;
     virtual void DrawIcon(const Icon* image, uint16_t x, uint16_t y, uint16_t color) = 0;

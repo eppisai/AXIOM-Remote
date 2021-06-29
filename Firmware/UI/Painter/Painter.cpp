@@ -28,6 +28,10 @@ Painter::Painter(volatile uint16_t* framebuffer, uint16_t framebufferWidth, uint
     SetFont(Font::FreeSans9pt7b);
 }
 
+void Painter::SetFrontFramebuffer(volatile uint16_t* frontFramebuffer){
+    _framebuffer = frontFramebuffer;
+}
+
 void Painter::SetDebugOverlay(IDebugPainter* debugPainter)
 {
     _debugPainter = debugPainter;

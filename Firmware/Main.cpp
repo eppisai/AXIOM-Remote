@@ -27,7 +27,9 @@
 
 // Defined in procdefs.ld
 volatile extern uint16_t framebuffer[ILI9341_TFTWIDTH * ILI9341_TFTHEIGHT];
-ILI9341Display display(framebuffer);
+volatile extern uint16_t transitionFramebuffer[ILI9341_TFTWIDTH * ILI9341_TFTHEIGHT];
+ILI9341Display display(framebuffer, transitionFramebuffer);
+bool transitionActive = false;
 
 void ConfigGPIO()
 {
@@ -589,36 +591,32 @@ int main()
     // init_uart2();
 
     uint16_t counter = 0;
+    bool framebufferSelection = true;
     while (1)
     {
         cdcDevice.Process();
 
         menuSystem.Update(PollButtons(&cdcDevice), PollKMW(&cdcDevice));
-
+        
+        if(menuSystem.CheckTransitionStatus()){
+            if(framebufferSelection){
+              painter->SetFrontFramebuffer(transitionFramebuffer);
+              display.SetActiveFramebuffer(transitionFramebuffer, framebuffer);
+              framebufferSelection = !framebufferSelection;
+            }
+            else{
+              painter->SetFrontFramebuffer(framebuffer);  
+              display.SetActiveFramebuffer(framebuffer, transitionFramebuffer);
+            }
+            transitionActive = true;
+        }
         menuSystem.Draw(painter);
-
+        
         counter++;
         sprintf(debugText, "%d\r\n", counter);
         painter->DrawText(3, 90, debugText, (uint16_t)Color565::Red, TextAlign::TEXT_ALIGN_LEFT, 0);
 
-        // painter.DrawFillRoundRectangle(50, 120, 100, 40, 5, (uint16_t)Color565::Black);
-        // Test
-        /*
-        painter.DrawCirlce(50, 120, counter % 20, Color565::White);
-        painter.DrawFillCirlce(120, 120, counter % 20, Color565::White);
-        painter.DrawCircleQuarter(200, 120, counter % 20, 1, Color565::White);
-        painter.DrawFillCircleQuarter(280, 120, counter % 20, 1, 0, Color565::White);
-        painter.DrawLine(50, 110, 300, 130, Color565::White);
-        */
-        // painter.DrawCirlce(100, 160, (counter+5)%30, Color565::Red);
-        // painter.DrawCirlce(270, 150, (counter+18)%14, Color565::Blue);
-        // painter.DrawCirlce(160, 120, (counter+2)%25, Color565::Green);
-        // painter.DrawCirlce(200, 90, (counter+12)%17, Color565::White);
-        // painter.DrawCircleQuarter(50, 150, counter%15, 1, Color565::White);
-
-        // cdcDevice.Send((uint8_t*)debugText, 10);
-
-        display.DisplayFramebuffer();
+        display.DisplayFramebuffer(transitionActive);
 
         // DelayMs(30);
     }

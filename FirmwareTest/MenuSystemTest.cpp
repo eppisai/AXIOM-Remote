@@ -14,8 +14,16 @@ TEST_CASE("SetCurrentScreen test")
     CentralDB centralDB;
     MenuSystem menuSystem(&dummyUSBDevice, &centralDB);
     menuSystem.SetCurrentScreen(AvailableScreens::MainMenu);
-
     REQUIRE(menuSystem.GetCurrentScreen() == AvailableScreens::MainMenu);
+}
+
+TEST_CASE("CheckTransitionStatus test")
+{
+    DummyUSBDevice dummyUSBDevice;
+    CentralDB centralDB;
+    MenuSystem menuSystem(&dummyUSBDevice, &centralDB);
+    menuSystem.SetCurrentScreen(AvailableScreens::WhiteBalance);
+    REQUIRE(menuSystem.CheckTransitionStatus() == true);
 }
 
 TEST_CASE("Draw test")

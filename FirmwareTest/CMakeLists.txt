@@ -19,7 +19,7 @@ FILE(GLOB FIRMWARE_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/../Firmware/UI/*.cpp"
                            "${CMAKE_CURRENT_SOURCE_DIR}/../Firmware/CentralDB/CentralDBObserver.cpp"
                            "${CMAKE_CURRENT_SOURCE_DIR}/../Firmware/GlobalSettings.cpp")
 
-SET(TEST_SOURCES Main.cpp PainterTest.cpp MenuSystemTest.cpp CentralDBObserverTest.cpp)
+SET(TEST_SOURCES Main.cpp PainterTest.cpp MenuSystemTest.cpp CentralDBObserverTest.cpp TransitionAlgoTest.cpp)
 
 ADD_EXECUTABLE(${PROJECT_NAME} ${TEST_SOURCES} ${FIRMWARE_SOURCES})
 

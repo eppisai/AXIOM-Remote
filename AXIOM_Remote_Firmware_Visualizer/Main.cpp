@@ -235,12 +235,12 @@ int main(int argc, char* argv[])
         
         if(menuSystem.CheckTransitionStatus()){
             if(framebufferSelection){
-              painter.SetFrontFramebuffer(transitionFramebuffer);
+              painter.SetActiveFramebuffer(transitionFramebuffer);
               display.SetActiveFramebuffer(transitionFramebuffer, framebuffer);
               framebufferSelection = !framebufferSelection;
             }
             else{
-              painter.SetFrontFramebuffer(framebuffer);  
+              painter.SetActiveFramebuffer(framebuffer);  
               display.SetActiveFramebuffer(framebuffer, transitionFramebuffer);
             }
             transitionActive = true;

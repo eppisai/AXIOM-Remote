@@ -56,7 +56,7 @@ class Painter : public IPainter
                                uint16_t color) override;
 
     // Misc
-    void SetFrontFramebuffer(volatile uint16_t* frontFramebuffer) override;
+    void SetActiveFramebuffer(volatile uint16_t* frontFramebuffer) override;
     void DrawImage(const uint8_t* data, uint16_t x, uint16_t y, uint16_t width, uint16_t height) override;
     void DrawPixel(uint16_t x, uint16_t y, uint16_t color) override;
     virtual void DrawIcon(const Icon* image, uint16_t x, uint16_t y, uint16_t color) override;

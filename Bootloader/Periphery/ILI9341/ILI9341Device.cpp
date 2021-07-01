@@ -412,7 +412,7 @@ void ILI9341Display::DisplayFramebuffer(bool& transitionActive)
     if(transitionActive){
         while (_transitionCounter > 0)
          {   
-            if(_transitionCounter <= _transitionAnimationSpeed - 1){
+            if(_transitionCounter < _transitionAnimationSpeed){
                transitionActive = false;
             }
 

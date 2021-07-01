@@ -607,6 +607,7 @@ int main()
             else{
               painter->SetActiveFramebuffer(framebuffer);  
               display.SetActiveFramebuffer(framebuffer, transitionFramebuffer);
+              framebufferSelection = !framebufferSelection;
             }
             transitionActive = true;
         }

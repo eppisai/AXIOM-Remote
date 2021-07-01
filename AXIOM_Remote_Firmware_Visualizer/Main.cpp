@@ -235,13 +235,16 @@ int main(int argc, char* argv[])
         
         if(menuSystem.CheckTransitionStatus()){
             if(framebufferSelection){
+              std::cout<<"framebufferSelection:  "<<"true\n";
               painter.SetActiveFramebuffer(transitionFramebuffer);
               display.SetActiveFramebuffer(transitionFramebuffer, framebuffer);
               framebufferSelection = !framebufferSelection;
             }
             else{
+              std::cout<<"framebufferSelection:  "<<"false\n";
               painter.SetActiveFramebuffer(framebuffer);  
               display.SetActiveFramebuffer(framebuffer, transitionFramebuffer);
+              framebufferSelection = !framebufferSelection;
             }
             transitionActive = true;
         }

@@ -32,11 +32,7 @@ void VirtualLCDDevice::DisplayFramebuffer(bool& transitionActive) {
     auto fb = new uint16_t[FRAMEBUFFER_WIDTH * FRAMEBUFFER_HEIGHT];
     if(transitionActive){
         while (_transitionCounter > 0)
-         {   
-            if(_transitionCounter <= _transitionAnimationSpeed - 1){
-               transitionActive = false;
-            }
-
+        {   
             uint16_t offset = (float)(_transitionCounter) / (float)(255) * FRAMEBUFFER_WIDTH;
             for(int index = 0; index < FRAMEBUFFER_WIDTH*FRAMEBUFFER_HEIGHT; index++){
                if(index%FRAMEBUFFER_WIDTH > offset){
@@ -48,7 +44,7 @@ void VirtualLCDDevice::DisplayFramebuffer(bool& transitionActive) {
             }
             _transitionCounter -= _transitionAnimationSpeed;
         }
-        
+        transitionActive = false;
     } 
     else {
         for(int index = 0; index < FRAMEBUFFER_WIDTH*FRAMEBUFFER_HEIGHT; index++){

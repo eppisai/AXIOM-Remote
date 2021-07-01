@@ -412,13 +412,9 @@ void ILI9341Display::DisplayFramebuffer(bool& transitionActive)
     if(transitionActive){
         while (_transitionCounter > 0)
          {   
-            if(_transitionCounter < _transitionAnimationSpeed){
-               transitionActive = false;
-            }
-
-            uint16_t offset = (float)(_transitionCounter) / (float)(255) * ILI9341_TFTHEIGHT;
+            uint16_t offset = ((float)(_transitionCounter) / (float)(255)) * 320;
             for(int index = 0; index < _framebufferSize; index++){
-               if(index%ILI9341_TFTHEIGHT > offset){
+               if(index%320 > offset){
                   WritePMP(_frontFramebuffer[index - offset]);
                }
                else{
@@ -427,7 +423,7 @@ void ILI9341Display::DisplayFramebuffer(bool& transitionActive)
             }
             _transitionCounter -= _transitionAnimationSpeed;
         }
-        
+        transitionActive = false;
     } 
     else {
         for(int index = 0; index < _framebufferSize; index++){

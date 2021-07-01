@@ -40,10 +40,10 @@ void VirtualLCDDevice::DisplayFramebuffer(bool& transitionActive) {
             uint16_t offset = (float)(_transitionCounter) / (float)(255) * FRAMEBUFFER_WIDTH;
             for(int index = 0; index < FRAMEBUFFER_WIDTH*FRAMEBUFFER_HEIGHT; index++){
                if(index%FRAMEBUFFER_WIDTH > offset){
-                  _framebuffer[index] = _frontFramebuffer[index + (FRAMEBUFFER_WIDTH - offset)];
+                  _framebuffer[index] = _frontFramebuffer[index - offset];
                }
                else{
-                  _framebuffer[index] = _backFramebuffer[index - offset];
+                  _framebuffer[index] = _backFramebuffer[index];
                }
             }
             _transitionCounter -= _transitionAnimationSpeed;

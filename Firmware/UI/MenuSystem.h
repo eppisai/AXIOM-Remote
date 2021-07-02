@@ -39,7 +39,6 @@ class MenuSystem : public IMenuSystem
     explicit MenuSystem(IUSBDevice* usbDevice, CentralDB* centraldb);
     virtual ~MenuSystem();
     
-    bool CheckTransitionStatus();
     void SetCurrentScreen(AvailableScreens menu) override;
     AvailableScreens GetCurrentScreen();
 

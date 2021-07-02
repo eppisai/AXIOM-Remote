@@ -25,7 +25,6 @@ void MenuSystem::SetCurrentScreen(AvailableScreens menu)
 }
 
 
-
 AvailableScreens MenuSystem::GetCurrentScreen()
 {
     return _currentScreenType;

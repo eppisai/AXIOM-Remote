@@ -408,10 +408,11 @@ void ILI9341Display::DisplayFramebuffer(bool& transitionActive)
     LCD_RSX_O = 1;
 
     SendCommandPMP(ILI9341_RAMWR);
-    _transitionCounter = 255;
     if(transitionActive){
-        while (_transitionCounter > 0)
-         {   
+            if (_transitionCounter < _transitionAnimationSpeed) {
+              transitionActive = false;
+              _transitionCounter = 255;
+            }
             uint16_t offset = ((float)(_transitionCounter) / (float)(255)) * 320;
             for(int index = 0; index < _framebufferSize; index++){
                if(index%320 < offset){
@@ -422,8 +423,7 @@ void ILI9341Display::DisplayFramebuffer(bool& transitionActive)
                }
             }
             _transitionCounter -= _transitionAnimationSpeed;
-        }
-        transitionActive = false;
+        
     } 
     else {
         for(int index = 0; index < _framebufferSize; index++){

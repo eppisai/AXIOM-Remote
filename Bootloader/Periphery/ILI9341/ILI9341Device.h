@@ -24,7 +24,7 @@ class ILI9341Display // : public ILCDDevice
     volatile uint16_t* _frontFramebuffer; //[_framebufferSize];
     // uint16_t _framebuffer[320 * 240];
     volatile uint16_t* _backFramebuffer;
-    int _transitionAnimationSpeed = 60;
+    int _transitionAnimationSpeed = 6;
     int _transitionCounter = 255;
 
     unsigned ReadPMP(void);

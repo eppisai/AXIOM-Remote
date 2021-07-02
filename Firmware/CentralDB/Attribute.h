@@ -18,6 +18,7 @@ class Attribute
         TEST_STRING,
         TEST_BOOLEAN,
         TEST_INT32,
+        TRANSITION_ACTIVE,
         /* TODO: adjust accordingly, i.e. add more attributes */
         NUM_ATTRIBUTES // DO NOT USE: referenced only to count the total number of attributes
     };

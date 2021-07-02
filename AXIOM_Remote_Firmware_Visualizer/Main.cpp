@@ -233,20 +233,19 @@ int main(int argc, char* argv[])
         menuSystem.Update(button, knobValue);
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         
-        if(menuSystem.CheckTransitionStatus()){
+        if(centralDB.GetBoolean(Attribute::ID::TRANSITION_ACTIVE)){
             if(framebufferSelection){
-              std::cout<<"framebufferSelection:  "<<"true\n";
               painter.SetActiveFramebuffer(transitionFramebuffer);
               display.SetActiveFramebuffer(transitionFramebuffer, framebuffer);
               framebufferSelection = !framebufferSelection;
             }
             else{
-              std::cout<<"framebufferSelection:  "<<"false\n";
               painter.SetActiveFramebuffer(framebuffer);  
               display.SetActiveFramebuffer(framebuffer, transitionFramebuffer);
               framebufferSelection = !framebufferSelection;
             }
             transitionActive = true;
+            centralDB.SetBoolean(Attribute::ID::TRANSITION_ACTIVE, false);
         }
         menuSystem.Draw(&painter);
         display.DisplayFramebuffer(transitionActive);

@@ -19,8 +19,8 @@ class MenuSystem : public IMenuSystem
 {
   protected:
     IScreen* _currentScreen;
-    AvailableScreens _currentScreenType;
-    AvailableScreens _currentlyDisplayedScreen,_previouslyDisplayedScreen;
+    AvailableScreens _currentScreenType, _previousScreenType;
+    CentralDB* _db;
 
     // TODO: Length has to be adjusted manually, as currently we use static init to save space on the MCU
     IScreen* _availableScreens[4];

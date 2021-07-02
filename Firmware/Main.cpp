@@ -29,7 +29,6 @@
 volatile extern uint16_t framebuffer[ILI9341_TFTWIDTH * ILI9341_TFTHEIGHT];
 volatile extern uint16_t transitionFramebuffer[ILI9341_TFTWIDTH * ILI9341_TFTHEIGHT];
 ILI9341Display display(framebuffer, transitionFramebuffer);
-bool transitionActive = false;
 
 void ConfigGPIO()
 {
@@ -592,13 +591,14 @@ int main()
 
     uint16_t counter = 0;
     bool framebufferSelection = true;
+    bool transitionActive = false;
     while (1)
     {
         cdcDevice.Process();
 
         menuSystem.Update(PollButtons(&cdcDevice), PollKMW(&cdcDevice));
         
-        if(menuSystem.CheckTransitionStatus()){
+        if(centralDB.GetBoolean(Attribute::ID::TRANSITION_ACTIVE)){
             if(framebufferSelection){
               painter->SetActiveFramebuffer(transitionFramebuffer);
               display.SetActiveFramebuffer(transitionFramebuffer, framebuffer);
@@ -610,6 +610,7 @@ int main()
               framebufferSelection = !framebufferSelection;
             }
             transitionActive = true;
+            centralDB.SetBoolean(Attribute::ID::TRANSITION_ACTIVE, false);
         }
         menuSystem.Draw(painter);
         

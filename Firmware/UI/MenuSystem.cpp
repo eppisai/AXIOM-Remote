@@ -6,14 +6,11 @@
 
 
 MenuSystem::MenuSystem(IUSBDevice* usbDevice, CentralDB* centraldb) :
-    _currentScreen(nullptr), _usbDevice(usbDevice), _mainPage(usbDevice), _MainMenu(usbDevice, centraldb),
+    _currentScreen(nullptr),_db(centraldb), _usbDevice(usbDevice), _mainPage(usbDevice), _MainMenu(usbDevice, centraldb),
     _settingsSubMenu1(usbDevice, centraldb), _whiteBalance(usbDevice)
 {
     InitializeAvailableScreens();
-
     SetCurrentScreen(AvailableScreens::MainPage);
-    _currentlyDisplayedScreen = AvailableScreens::MainPage;
-    _previouslyDisplayedScreen = _currentlyDisplayedScreen;
 }
 
 MenuSystem::~MenuSystem()
@@ -24,17 +21,10 @@ void MenuSystem::SetCurrentScreen(AvailableScreens menu)
 {
     _currentScreenType = menu;
     _currentScreen = _availableScreens[(uint8_t)menu];
-    _currentlyDisplayedScreen = menu;
-    // std::cout<<"screen changed\n";
+    _db->SetBoolean(Attribute::ID::TRANSITION_ACTIVE, true);
 }
 
-bool MenuSystem::CheckTransitionStatus(){
-   if (_currentlyDisplayedScreen != _previouslyDisplayedScreen) {
-       _previouslyDisplayedScreen = _currentlyDisplayedScreen;  
-       return true;
-   } 
-   return false;
-}
+
 
 AvailableScreens MenuSystem::GetCurrentScreen()
 {

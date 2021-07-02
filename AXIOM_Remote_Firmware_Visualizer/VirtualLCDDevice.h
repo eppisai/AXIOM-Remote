@@ -11,7 +11,7 @@ class VirtualLCDDevice: public ILCDDevice {
   volatile uint16_t * _framebuffer;
   volatile uint16_t * _frontFramebuffer;
   volatile uint16_t * _backFramebuffer;
-  int _transitionAnimationSpeed = 6;
+  int _transitionAnimationSpeed = 60;
   int _transitionCounter = 255;
   public:
     explicit VirtualLCDDevice(volatile uint16_t * frameBuffer, volatile uint16_t * transitionframeBuffer, volatile uint16_t * framebuffer);

@@ -414,11 +414,11 @@ void ILI9341Display::DisplayFramebuffer(bool& transitionActive)
          {   
             uint16_t offset = ((float)(_transitionCounter) / (float)(255)) * 320;
             for(int index = 0; index < _framebufferSize; index++){
-               if(index%320 > offset){
-                  WritePMP(_frontFramebuffer[index - offset]);
+               if(index%320 < offset){
+                  WritePMP(_backFramebuffer[index]);
                }
                else{
-                  WritePMP(_backFramebuffer[index]);
+                  WritePMP(_frontFramebuffer[index - offset]);
                }
             }
             _transitionCounter -= _transitionAnimationSpeed;

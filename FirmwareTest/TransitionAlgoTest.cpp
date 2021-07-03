@@ -1,50 +1,44 @@
 #include "catch2/catch.hpp"
 
-#include <cstring>
-
-#include "PainterMod.h"
+#include "ILI9341DeviceMod.h"
 
 // Test data
-#include "Images/FramebufferData.h"
-#include "Images/TransitionFramebufferData.h"
+#include "Images/frontFramebufferData.h"
+#include "Images/backFramebufferData.h"
+#include "Images/expectedFrames.h"
 
-uint16_t frontFramebuffer[] = {0x0, 0x0, 0x0, 0x0, 0x0,//
-                               0x0, 0x0, 0x0, 0x0, 0x0,//
-                               0x0, 0x0, 0x0, 0x0, 0x0,//
-                               0x0, 0x0, 0x0, 0x0, 0x0,//
-                               0x0, 0x0, 0x0, 0x0, 0x0,};
 
-uint16_t backFramebuffer[] =  {0x1, 0x1, 0x1, 0x1, 0x1,//
-                               0x1, 0x1, 0x1, 0x1, 0x1,//
-                               0x1, 0x1, 0x1, 0x1, 0x1,//
-                               0x1, 0x1, 0x1, 0x1, 0x1,//
-                               0x1, 0x1, 0x1, 0x1, 0x1,};
+//Transition Animation is nothing but collection of different frames played very fast consequently one after other.
+//In our case the transition consititutes of six different frames(each is combination of front framebuffer and back framebuffer)
+//In below test case we are checking, the output of each frame produced by DisplayTransitionAnimation() and checking if each pixel of 
+//each frame matches with pixel of each expected frames.  
+TEST_CASE("DisplayTransitionAnimation TEST"){
+  
+  //ARRANGE
+  ILI9341DisplayMod display(frontFramebuffer, backFramebuffer);
 
-int transitionCounter = 255, transitionAnimationSpeed = 60, framebufferSize = 5*5;
-
-void DisplayFramebuffer(bool& transitionActive)
-{
+  //ACT
+  int fps = 0;
+  bool transitionActive = true;
+  while(fps < 6){
     if(transitionActive){
-            if (transitionCounter < transitionAnimationSpeed) {
-              transitionActive = false;
-              transitionCounter = 255;
-            }
-            uint16_t offset = ((float)(transitionCounter) / (float)(255)) * 320;
-            for(int index = 0; index < framebufferSize; index++){
-               if(index%320 < offset){
-                  WritePMP(backFramebuffer[index]);
-               }
-               else{
-                  WritePMP(frontFramebuffer[index - offset]);
-               }
-            }
-            transitionCounter -= transitionAnimationSpeed;
-        
-    } 
-    else {
-        for(int index = 0; index < framebufferSize; index++){
-            WritePMP(_frontFramebuffer[index]);
-        }
+      display.DisplayTransitionAnimation(transitionActive, expectedFrames[fps]);
     }
+    fps++;
+  }
 
+  //ASSERT
+  REQUIRE(display.CorrectArrayBound == true);
 }
+
+
+// TEST_CASE("SetActiveFramebuffer"){
+
+//   //ARRANGE
+//   ILI9341DisplayMod display(frontFramebuffer, backFramebuffer);
+
+//   //ACT
+//   display.SetActiveFramebuffer(backFramebuffer, frontFramebuffer);
+
+//   //ASSERT
+// }

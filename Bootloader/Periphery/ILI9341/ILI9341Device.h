@@ -53,7 +53,9 @@ class ILI9341Display // : public ILCDDevice
     void ClearFramebuffer(uint16_t color);
     void UpdateFramebuffer();
 
-    void DisplayFramebuffer(bool& transitionActive);
+    void DisplayFramebuffer();
+
+    void DisplayTransitionAnimation(bool& transitionActive);
 
     void SetupBacklightControl();
     void SetBacklight(uint8_t percentage);

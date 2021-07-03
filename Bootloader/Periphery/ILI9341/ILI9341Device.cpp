@@ -382,22 +382,7 @@ uint16_t areaY = 0;
 uint16_t areaWidth = ILI9341_TFTHEIGHT - 1;
 int16_t areaHeight = ILI9341_TFTWIDTH - 1;
 
-void ILI9341Display::SetArea(uint16_t x, uint16_t y, uint16_t width, uint16_t height)
-{
-    areaX = x;
-    areaY = y;
-    areaWidth = width;
-    areaHeight = height;
-
-    SendCommandPMP(ILI9341_CASET);
-    WriteWordPMP(x);
-    WriteWordPMP(x + width);
-    SendCommandPMP(ILI9341_PASET);
-    WriteWordPMP(y);
-    WriteWordPMP(y + height);
-}
-
-void ILI9341Display::DisplayFramebuffer(bool& transitionActive)
+void ILI9341Display::DisplayFramebuffer()
 {
     while (!LCD_TE_I)
         ;
@@ -408,29 +393,12 @@ void ILI9341Display::DisplayFramebuffer(bool& transitionActive)
     LCD_RSX_O = 1;
 
     SendCommandPMP(ILI9341_RAMWR);
-    if(transitionActive){
-            uint16_t offset = ((float)(_transitionCounter) / (float)(255)) * 320;
-            for(int index = 0; index < _framebufferSize; index++){
-               if(index%320 < offset){
-                  WritePMP(_backFramebuffer[index]);
-               }
-               else{
-                  WritePMP(_frontFramebuffer[index - offset]);
-               }
-            }
 
-            if (_transitionCounter < _transitionAnimationSpeed) {
-              transitionActive = false;
-              _transitionCounter = 255;
-            }
-            else{
-             _transitionCounter -= _transitionAnimationSpeed;
-            }
-        
-    } 
-    else {
-        for(int index = 0; index < _framebufferSize; index++){
-            WritePMP(_frontFramebuffer[index]);
+    for (uint16_t y = areaY; y < areaY + areaHeight + 1; ++y)
+    {
+        for (uint16_t x = areaX; x < areaX + areaWidth + 1; ++x)
+        {
+            WritePMP(_frontFramebuffer[x + y * 320]);
         }
     }
 
@@ -441,6 +409,39 @@ void ILI9341Display::DisplayFramebuffer(bool& transitionActive)
 
     LCD_RSX_O = 0;
     LCD_RSX_O = 1;
+}
+
+void ILI9341Display::DisplayTransitionAnimation(bool& transitionActive)
+{      
+        while (!LCD_TE_I)
+            ;
+        while (LCD_TE_I)
+            ;
+        LCD_RSX_O = 0;
+        LCD_RSX_O = 1;
+
+        SendCommandPMP(ILI9341_RAMWR);
+
+        uint16_t offset = ((float)(_transitionCounter) / (float)(255)) * ILI9341_TFTHEIGHT;
+        for(int index = 0; index < _framebufferSize; index++){
+            if(index%ILI9341_TFTHEIGHT < offset){
+                WritePMP(_backFramebuffer[index]);
+            }
+            else{
+                WritePMP(_frontFramebuffer[index - offset]);
+            }
+        }
+
+        if (_transitionCounter < _transitionAnimationSpeed) {
+            transitionActive = false;
+            _transitionCounter = 255;
+        }
+        else {
+            _transitionCounter -= _transitionAnimationSpeed;
+        } 
+
+        LCD_RSX_O = 0;
+        LCD_RSX_O = 1; 
 }
 
 void ILI9341Display::SetBacklight(uint8_t percentage)

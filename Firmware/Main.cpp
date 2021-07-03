@@ -617,9 +617,13 @@ int main()
         counter++;
         sprintf(debugText, "%d\r\n", counter);
         painter->DrawText(3, 90, debugText, (uint16_t)Color565::Red, TextAlign::TEXT_ALIGN_LEFT, 0);
-
-        display.DisplayFramebuffer(transitionActive);
-
+        
+        if(transitionActive){
+          display.DisplayTransitionAnimation(transitionActive);
+        }
+        else{
+          display.DisplayFramebuffer();
+        }
         // DelayMs(30);
     }
 

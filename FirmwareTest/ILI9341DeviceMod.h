@@ -4,33 +4,25 @@
 #include <iostream>
 #include <cstring>
 
-class ILI9341DisplayMod
-{
-   
-    volatile uint16_t* _frontFramebuffer; 
-    volatile uint16_t* _backFramebuffer;
-    int _transitionAnimationSpeed;
-    int _transitionCounter;
+#include "../Bootloader/Periphery/ILI9341/ILI9341Device.h"
 
+#define ILI9341_TFTWIDTH   5     ///smaller for testing
+#define ILI9341_TFTHEIGHT  5     ///smaller for testing
+
+class ILI9341DisplayMod : public ILI9341Display
+{
     public: 
      bool CorrectArrayBound = true;
 
-     ILI9341DisplayMod(uint16_t* framebuffer, uint16_t* transitionFramebuffer){
-        _frontFramebuffer = framebuffer;
-        _backFramebuffer = transitionFramebuffer;
-        _transitionAnimationSpeed = 60;
-        _transitionCounter = 255;       
-     }
-
-     void SetActiveFramebuffer(volatile uint16_t* frontFramebuffer,volatile uint16_t* backFramebuffer){
-       _frontFramebuffer = frontFramebuffer;
-       _backFramebuffer = backFramebuffer;
-     }
+     ILI9341DisplayMod(uint16_t* framebuffer, uint16_t* transitionFramebuffer) : 
+        ILI9341Display(framebuffer, transitionFramebuffer)
+    {
+    }
 
      void DisplayTransitionAnimation(bool& transitionActive, uint16_t* expectedOutput){
         
-        uint16_t offset = ((float)(_transitionCounter) / (float)(255)) * 5;
-        for(int index = 0; index < 25; index++){
+        uint16_t offset = ((float)(_transitionCounter) / (float)(255)) * ILI9341_TFTHEIGHT;
+        for(int index = 0; index < ILI9341_TFTHEIGHT*ILI9341_TFTWIDTH; index++){
             if(index%5 < offset){
                 if(expectedOutput[index] != _backFramebuffer[index]) {
                   CorrectArrayBound = false;

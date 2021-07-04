@@ -17,10 +17,10 @@ FILE(GLOB FIRMWARE_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/../Firmware/UI/*.cpp"
                            "${CMAKE_CURRENT_SOURCE_DIR}/../Firmware/CentralDB/Attribute.cpp"
                            "${CMAKE_CURRENT_SOURCE_DIR}/../Firmware/CentralDB/CentralDB.cpp"
                            "${CMAKE_CURRENT_SOURCE_DIR}/../Firmware/CentralDB/CentralDBObserver.cpp"
-                           "${CMAKE_CURRENT_SOURCE_DIR}/../Firmware/GlobalSettings.cpp"
-                           "${CMAKE_CURRENT_SOURCE_DIR}/../Bootloader/Periphery/ILI9341/ILI9341Device.cpp")
+                           "${CMAKE_CURRENT_SOURCE_DIR}/../Firmware/GlobalSettings.cpp")
+                        #    "${CMAKE_CURRENT_SOURCE_DIR}/../Bootloader/Periphery/ILI9341/ILI9341Device.cpp")
 
-SET(TEST_SOURCES Main.cpp PainterTest.cpp MenuSystemTest.cpp CentralDBObserverTest.cpp)
+SET(TEST_SOURCES Main.cpp PainterTest.cpp MenuSystemTest.cpp CentralDBObserverTest.cpp DisplayDriverTest.cpp)
 
 ADD_EXECUTABLE(${PROJECT_NAME} ${TEST_SOURCES} ${FIRMWARE_SOURCES})
 

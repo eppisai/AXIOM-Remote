@@ -590,7 +590,7 @@ int main()
     // init_uart2();
 
     uint16_t counter = 0;
-    bool framebufferSelection = true;
+    bool framebufferSelection = false;
     bool transitionActive = false;
     while (1)
     {

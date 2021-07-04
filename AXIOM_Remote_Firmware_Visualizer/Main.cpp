@@ -248,7 +248,13 @@ int main(int argc, char* argv[])
             centralDB.SetBoolean(Attribute::ID::TRANSITION_ACTIVE, false);
         }
         menuSystem.Draw(&painter);
-        display.DisplayFramebuffer(transitionActive);
+
+        if(transitionActive){
+            display.DisplayTransitionAnimation(transitionActive);
+        }
+        else{
+            display.DisplayFramebuffer();
+        }
 
         glBindTexture(GL_TEXTURE_2D, displayTextureID);
         glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, FRAMEBUFFER_WIDTH, FRAMEBUFFER_HEIGHT, GL_RGB, GL_UNSIGNED_SHORT_5_6_5,

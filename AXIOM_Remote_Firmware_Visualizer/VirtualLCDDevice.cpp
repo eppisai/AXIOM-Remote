@@ -27,28 +27,29 @@ void VirtualLCDDevice::SetActiveFramebuffer(volatile uint16_t* frontFramebuffer,
     _backFramebuffer = backFramebuffer;
 }
 
-void VirtualLCDDevice::DisplayFramebuffer(bool& transitionActive) {
-    
-    if(transitionActive){
-            if (_transitionCounter < _transitionAnimationSpeed) {
-              transitionActive = false;
-              _transitionCounter = 255;
-            }
-
-            uint16_t offset = (float)(_transitionCounter) / (float)(255) * FRAMEBUFFER_WIDTH;
-            for(int index = 0; index < FRAMEBUFFER_WIDTH*FRAMEBUFFER_HEIGHT; index++){
-               if(index%FRAMEBUFFER_WIDTH > offset){
-                  _framebuffer[index] = _frontFramebuffer[index - offset];
-               }
-               else{
-                  _framebuffer[index] = _backFramebuffer[index];
-               }
-            }
-            _transitionCounter -= _transitionAnimationSpeed;
-    } 
-    else {
+void VirtualLCDDevice::DisplayFramebuffer() {   
         for(int index = 0; index < FRAMEBUFFER_WIDTH*FRAMEBUFFER_HEIGHT; index++){
             _framebuffer[index] = _frontFramebuffer[index];
         }
-    }
+}
+
+void VirtualLCDDevice::DisplayTransitionAnimation(bool& transitionActive)
+{      
+        uint16_t offset = ((float)(_transitionCounter) / (float)(255)) * FRAMEBUFFER_WIDTH;
+        for(int index = 0; index < FRAMEBUFFER_WIDTH*FRAMEBUFFER_HEIGHT; index++){
+            if(index%FRAMEBUFFER_WIDTH < offset){
+                _framebuffer[index] = _backFramebuffer[index];
+            }
+            else{
+                _framebuffer[index] = _frontFramebuffer[index - offset];
+            }
+        }
+
+        if (_transitionCounter < _transitionAnimationSpeed) {
+            transitionActive = false;
+            _transitionCounter = 255;
+        }
+        else {
+            _transitionCounter -= _transitionAnimationSpeed;
+        } 
 }

@@ -422,8 +422,8 @@ void ILI9341Display::DisplayTransitionAnimation(bool& transitionActive)
 
         SendCommandPMP(ILI9341_RAMWR);
 
-        uint16_t offset = ((float)(_transitionCounter) / (float)(255)) * ILI9341_TFTHEIGHT;
-        for(uint16_t index = 0; index < _framebufferSize; index++){
+        uint8_t offset = ((float)(_transitionCounter) / (float)(255)) * ILI9341_TFTHEIGHT;
+        for(uint8_t index = 0; index < _framebufferSize; index++){
             if(index%ILI9341_TFTHEIGHT < offset){
                 WritePMP(_backFramebuffer[index]);
             }

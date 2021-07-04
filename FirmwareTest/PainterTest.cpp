@@ -7,6 +7,8 @@
 // Test data
 #include "Images/LogoIcon.h"
 #include "Images/LogoIconOutput.h"
+#include "Images/frontFramebufferData.h"
+#include "Images/backFramebufferData.h"
 
 // Setup frame buffer and reset all values to 0
 uint16_t* SetupFramebuffer(uint16_t width, uint16_t height)
@@ -212,5 +214,18 @@ TEST_CASE("DrawIcon test")
     REQUIRE(index == 60);
     REQUIRE(check == true);
 }
+
+// TEST_CASE("SetActiveFramebuffer test")
+// {
+//     //ARRANGE
+//     PainterMod painter(frontFramebuffer, 5, 5);
+
+//     //ACT
+//     painter.SetActiveFramebuffer(backFramebuffer);
+
+//     //ASSERT
+//     painter.
+
+// }
 
 

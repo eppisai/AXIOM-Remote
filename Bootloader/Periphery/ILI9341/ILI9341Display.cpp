@@ -1,4 +1,4 @@
-#include "ILI9341Device.h"
+#include "ILI9341Display.h"
 
 #include <xc.h>
 
@@ -6,7 +6,10 @@
 #include "Helpers.h"
 
 ILI9341Display::ILI9341Display(volatile uint16_t* framebuffer,  volatile uint16_t* transitionframebuffer)
-{
+    uint16_t areaX = 0;
+    uint16_t areaY = 0;
+    uint16_t areaWidth = ILI9341_TFTHEIGHT - 1;
+    int16_t areaHeight = ILI9341_TFTWIDTH - 1;
     _frontFramebuffer = framebuffer;
     _backFramebuffer = transitionframebuffer;
     _transitionAnimationSpeed = 60;
@@ -331,15 +334,19 @@ void ILI9341Display::Initialize()
     WritePMP(0x36);
     WritePMP(0x0F);
 
+    // Scroll area
+    SendCommandPMP(ILI9341_VSCRDEF);
+    WritePMP(0);
+    WritePMP(20);
+    WritePMP(0);
+    WritePMP(150);
+    WritePMP(0);
+    WritePMP(40);
+
     // Landscape mode
     SendCommandPMP(ILI9341_MADCTL);
     WritePMP(0b00101000);
-    SendCommandPMP(ILI9341_PASET);
-    WriteWordPMP(0);
-    WriteWordPMP(ILI9341_TFTWIDTH - 1);
-    SendCommandPMP(ILI9341_CASET);
-    WriteWordPMP(0);
-    WriteWordPMP(ILI9341_TFTHEIGHT - 1);
+    SetArea(areaX, areaY, areaWidth, areaHeight);
 
     SetupBacklightControl();
 
@@ -377,10 +384,22 @@ void ILI9341Display::Initialize()
 //    SendCommandPMP(ILI9341_RAMWR); // write to RAM
 //}
 
-uint16_t areaX = 0;
-uint16_t areaY = 0;
-uint16_t areaWidth = ILI9341_TFTHEIGHT - 1;
-int16_t areaHeight = ILI9341_TFTWIDTH - 1;
+
+
+void ILI9341Display::SetArea(uint16_t x, uint16_t y, uint16_t width, uint16_t height)
+{
+    areaX = x;
+    areaY = y;
+    areaWidth = width + x > 320 ? 320 - x : width;
+    areaHeight = height + y > 240 ? 240 - y : height;
+
+    SendCommandPMP(ILI9341_CASET);
+    WriteWordPMP(x);
+    WriteWordPMP(x + width);
+    SendCommandPMP(ILI9341_PASET);
+    WriteWordPMP(y);
+    WriteWordPMP(y + height);
+}
 
 void ILI9341Display::DisplayFramebuffer()
 {
@@ -398,7 +417,10 @@ void ILI9341Display::DisplayFramebuffer()
     {
         for (uint16_t x = areaX; x < areaX + areaWidth + 1; ++x)
         {
-            WritePMP(_frontFramebuffer[x + y * 320]);
+            WritePMP(_framebuffer[x + y * 320]);
+            SendCommandPMP(ILI9341_VSCRSADD);
+            WritePMP(0);
+            WritePMP(20);
         }
     }
 

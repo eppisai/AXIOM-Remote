@@ -6,14 +6,14 @@
 #include "Helpers.h"
 
 ILI9341Display::ILI9341Display(volatile uint16_t* framebuffer,  volatile uint16_t* transitionframebuffer)
-uint16_t areaX = 0;
-uint16_t areaY = 0;
-uint16_t areaWidth = ILI9341_TFTHEIGHT - 1;
-int16_t areaHeight = ILI9341_TFTWIDTH - 1;
-_frontFramebuffer = framebuffer;
-_backFramebuffer = transitionframebuffer;
-_transitionAnimationSpeed = 60;
-_transitionCounter = 255;
+    uint16_t areaX = 0;
+    uint16_t areaY = 0;
+    uint16_t areaWidth = ILI9341_TFTHEIGHT - 1;
+    int16_t areaHeight = ILI9341_TFTWIDTH - 1;
+    _frontFramebuffer = framebuffer;
+    _backFramebuffer = transitionframebuffer;
+    _transitionAnimationSpeed = 60;
+    _transitionCounter = 255;
 }
 
 void ILI9341Display::SetupBacklightControl()

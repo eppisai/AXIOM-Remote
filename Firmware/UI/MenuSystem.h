@@ -13,7 +13,6 @@
 class Painter;
 class IScreen;
 class IUSBDevice;
-class ILI9341Device;
 
 class MenuSystem : public IMenuSystem
 {
@@ -44,7 +43,7 @@ class MenuSystem : public IMenuSystem
 
     void Draw(IPainter* painter);
 
-    void Update(Button button, int8_t knob);
+    void Update(ButtonID button, int8_t knob);
 };
 
 #endif // MENUSYSTEM_H

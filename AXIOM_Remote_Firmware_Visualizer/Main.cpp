@@ -192,7 +192,7 @@ int main(int argc, char* argv[])
 
     MenuSystem menuSystem(&cdcDevice, &centralDB);
 
-    Button button = Button::BUTTON_NONE;
+    ButtonID button = ButtonID::BUTTON_NONE;
 
     int8_t knobValue = 0;
     bool debugOverlayEnabled = false;
@@ -227,7 +227,7 @@ int main(int argc, char* argv[])
         #endif
 
 
-        button = Button::BUTTON_NONE;
+        button = ButtonID::BUTTON_NONE;
         virtualUI->RenderUI(button, knobValue, debugOverlayEnabled);
 
         menuSystem.Update(button, knobValue);

@@ -47,32 +47,47 @@ inline void uart2_long(uint32_t val)
     uart2_word(val);
 }
 
-extern "C" void _general_exception_handler(void)
+#define STACK_OFFSET_RA ((72 + 24) / 4) // values to be checked before field release
+#define STACK_OFFSET_V0 ((8 + 24) / 4)  // values to be checked before field release
+#define STACK_OFFSET_V1 ((12 + 24) / 4) // values to be checked before field release
+
+void LogException(const char id[4])
 {
+    register int stackptr asm("sp");
+    uint32_t* pStack = (uint32_t*)stackptr;
+    uint32_t ra = *(pStack + STACK_OFFSET_RA);
+    uint32_t v0 = *(pStack + STACK_OFFSET_V0);
+    uint32_t v1 = *(pStack + STACK_OFFSET_V1);
+
     address = _CP0_GET_EPC();
     cause = (_CP0_GET_CAUSE() & 0x0000007C) >> 2;
 
-    uart2_str0("GE EA:");
+    uart2_str0(id);
+    uart2_str0(" EA:");
     uart2_long(address);
     uart2_str0(" C:");
     uart2_byte(cause);
+    uart2_str0(" RA:");
+    uart2_long(ra);
+    uart2_str0(" V0:");
+    uart2_long(v0);
+    uart2_str0(" V1:");
+    uart2_long(v1);
     uart2_str0("\r\n");
+}
+
+extern "C" void __attribute__((nomips16)) _general_exception_handler(void)
+{
+    LogException((const char*)"GE");
 
     while (1)
     {
     }
 }
 
-extern "C" void _simple_tlb_refill_exception_handler(void)
+extern "C" void __attribute__((nomips16)) _simple_tlb_refill_exception_handler(void)
 {
-    address = _CP0_GET_EPC();
-    cause = (_CP0_GET_CAUSE() & 0x0000007C) >> 2;
-
-    uart2_str0("TLB EA:");
-    uart2_long(address);
-    uart2_str0(" C:");
-    uart2_byte(cause);
-    uart2_str0("\r\n");
+    LogException((const char*)"TLB");
 
     while (1)
     {

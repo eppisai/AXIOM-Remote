@@ -5,11 +5,13 @@
 //#include "LCDDefinitions.h"
 #include "Helpers.h"
 
+uint16_t areaX = 0;
+uint16_t areaY = 0;
+uint16_t areaWidth = ILI9341_TFTHEIGHT - 1;
+int16_t areaHeight = ILI9341_TFTWIDTH - 1;
+
 ILI9341Display::ILI9341Display(volatile uint16_t* framebuffer,  volatile uint16_t* transitionframebuffer)
-    uint16_t areaX = 0;
-    uint16_t areaY = 0;
-    uint16_t areaWidth = ILI9341_TFTHEIGHT - 1;
-    int16_t areaHeight = ILI9341_TFTWIDTH - 1;
+{    
     _frontFramebuffer = framebuffer;
     _backFramebuffer = transitionframebuffer;
     _transitionAnimationSpeed = 60;
@@ -417,7 +419,7 @@ void ILI9341Display::DisplayFramebuffer()
     {
         for (uint16_t x = areaX; x < areaX + areaWidth + 1; ++x)
         {
-            WritePMP(_framebuffer[x + y * 320]);
+            WritePMP(_frontFramebuffer[x + y * 320]);
             SendCommandPMP(ILI9341_VSCRSADD);
             WritePMP(0);
             WritePMP(20);

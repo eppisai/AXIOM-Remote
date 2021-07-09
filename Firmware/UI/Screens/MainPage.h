@@ -14,7 +14,7 @@
 //#include "../../../Bootloader/Periphery/USB/IUSBDevice.h"
 
 class MenuSystem;
-class IUSBDevice;
+class UART;
 
 class MainPage : public IMenu
 {
@@ -33,7 +33,7 @@ class MainPage : public IMenu
     void SetupButtons();
 
   public:
-    explicit MainPage(IUSBDevice* cdcDevice);
+    explicit MainPage(UART* uart);
 
   protected:
     virtual Color565 GetBackgroundColor() override;

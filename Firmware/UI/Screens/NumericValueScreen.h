@@ -13,7 +13,7 @@
 #include <stdio.h>
 
 class IPainter;
-class IUSBDevice;
+class UART;
 
 class NumericValueScreen : public IScreen
 {
@@ -33,7 +33,7 @@ class NumericValueScreen : public IScreen
     char const* _suffix;
 
   public:
-    explicit NumericValueScreen(IUSBDevice* usbDevice);
+    explicit NumericValueScreen(UART* uart);
 
     void SetRange(int16_t min, int16_t max);
 

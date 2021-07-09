@@ -1,7 +1,7 @@
 #include "NumericValueScreen.h"
 
-NumericValueScreen::NumericValueScreen(IUSBDevice* usbDevice) :
-    IScreen(usbDevice), _header("Parameter Menu"), _cancelButton("Cancel"), _liveButton("Live"), _setButton("Set"),
+NumericValueScreen::NumericValueScreen(UART* uart) :
+    IScreen(uart), _header("Parameter Menu"), _cancelButton("Cancel"), _liveButton("Live"), _setButton("Set"),
     _value(0), _stepSize(1), _suffix("")
 {
     //_cancelButton.SetHandler(&CancelButtonHandler);

@@ -4,7 +4,7 @@
 #include "../MenuSystem.h"
 
 // TODO: Add assignment of menu system to IMenu
-MainPage::MainPage(IUSBDevice* cdcDevice) : IMenu(cdcDevice), _backgroundColor(Color565::MenuBackground)
+MainPage::MainPage(UART* uart) : IMenu(uart), _backgroundColor(Color565::MenuBackground)
 {
     SetupButtons();
 }

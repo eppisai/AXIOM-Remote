@@ -14,7 +14,6 @@
 
 #include "../../GlobalSettings.h"
 
-#include "Periphery/USB/IUSBDevice.h"
 
 //#include <Helpers.h>
 

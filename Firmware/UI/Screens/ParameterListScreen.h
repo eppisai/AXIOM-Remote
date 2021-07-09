@@ -10,7 +10,7 @@
 #include "../../GlobalSettings.h"
 
 class IPainter;
-class IUSBDevice;
+class UART;
 
 class ParameterListScreen : public IScreen
 {
@@ -35,8 +35,8 @@ class ParameterListScreen : public IScreen
     uint8_t _optionLineHeight;
 
   public:
-    explicit ParameterListScreen(IUSBDevice* usbDevice) :
-        IScreen(usbDevice), _header("Parameter Menu"), _cancelButton("Cancel"), _setButton("Set"),
+    explicit ParameterListScreen(UART* uart) :
+        IScreen(uart), _header("Parameter Menu"), _cancelButton("Cancel"), _setButton("Set"),
         _backgroundColor((uint16_t)Color565::White), _textColor((uint16_t)Color565::Black),
         _highlightColor((uint16_t)Color565::AXIOM_Orange), _highlightTextColor((uint16_t)Color565::White),
         _backgroundPressedColor(utils::RGB565(0, 128, 255)), _textPressedColor((uint16_t)Color565::White),

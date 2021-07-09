@@ -20,7 +20,7 @@
 // #include "../../CentralDB/CentralDB.h"
 
 class CentralDB;
-class IUSBDevice;
+class UART;
 class MenuItem;
 class NumericMenuItem;
 

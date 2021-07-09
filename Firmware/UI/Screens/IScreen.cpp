@@ -4,8 +4,8 @@
 
 #include "../../Media/Icons/home_icon.h"
 
-IScreen::IScreen(IUSBDevice* usbDevice) :
-    _usbDevice(usbDevice), _bottomButtonBar(ButtonBar(0, 210, 320, 30)), _leftButtonBar(0, 31, 34, 180),
+IScreen::IScreen(UART* uart) :
+    _uart(uart), _bottomButtonBar(ButtonBar(0, 210, 320, 30)), _leftButtonBar(0, 31, 34, 180),
     _homeButton(&home_icon)
 {
     _leftButtonBar.SetButton(ButtonPosition::Left, &_homeButton);

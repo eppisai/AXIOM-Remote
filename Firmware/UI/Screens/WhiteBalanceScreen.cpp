@@ -8,10 +8,10 @@
 
 #include "../../GlobalSettings.h"
 
-class IUSBDevice;
+class UART;
 
-WhiteBalanceScreen::WhiteBalanceScreen(IUSBDevice* usbDevice) :
-    IScreen(usbDevice), _cancelButton("Cancel"), _setButton("Set"), _addPresetButton("Add")
+WhiteBalanceScreen::WhiteBalanceScreen(UART* uart) :
+    IScreen(uart), _cancelButton("Cancel"), _setButton("Set"), _addPresetButton("Add")
 {
     _cancelButton.SetHandler(&CancelButtonHandler);
     _bottomButtonBar.SetButton(ButtonPosition::Left, &_cancelButton);

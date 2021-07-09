@@ -19,7 +19,7 @@
 // #include "../../GlobalSettings.h"
 
 class CentralDB;
-class IUSBDevice;
+class UART;
 
 class MainMenu : public Menu
 {
@@ -40,6 +40,6 @@ class MainMenu : public Menu
 
   public:
     // TODO: Add assignment of menu system to IMenu
-    explicit MainMenu(IUSBDevice* cdcDevice, CentralDB* centralDB);
+    explicit MainMenu(UART* uart, CentralDB* centralDB);
 };
 #endif // MAINMENU_H

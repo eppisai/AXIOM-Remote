@@ -12,7 +12,7 @@
 
 class Painter;
 class IScreen;
-class IUSBDevice;
+class Uart;
 
 class MenuSystem : public IMenuSystem
 {

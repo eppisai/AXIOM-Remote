@@ -7,7 +7,7 @@
 #include "../Widgets/ImageButton.h"
 
 class ButtonBar;
-class IUSBDevice;
+class UART;
 class IPainter;
 class IMenuSystem;
 
@@ -19,7 +19,7 @@ enum class Color565;
 class IScreen
 {
   protected:
-    IUSBDevice* _usbDevice;
+    UART* _uart;
 
     ButtonBar _bottomButtonBar;
     ButtonBar _leftButtonBar;
@@ -36,7 +36,7 @@ class IScreen
     virtual void SetLeftButton(ButtonPosition position, IButton* button);
 
   public:
-    IScreen(IUSBDevice* usbDevice = nullptr);
+    IScreen(UART* uart = nullptr);
     virtual ~IScreen();
 
     virtual Color565 GetBackgroundColor();

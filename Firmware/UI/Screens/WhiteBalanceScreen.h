@@ -6,7 +6,7 @@
 #include "../Widgets/ImageButton.h"
 
 class IPainter;
-class IUSBDevice;
+class UART;
 enum class ButtonID;
 
 class WhiteBalanceScreen : public IScreen
@@ -16,7 +16,7 @@ class WhiteBalanceScreen : public IScreen
     PushButton _addPresetButton;
 
   public:
-    explicit WhiteBalanceScreen(IUSBDevice* usbDevice);
+    explicit WhiteBalanceScreen(UART* uart);
 
     virtual void Draw(IPainter* painter) override;
 

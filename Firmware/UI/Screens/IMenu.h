@@ -11,7 +11,7 @@
 class IMenu : public IScreen
 {
   public:
-    IMenu(IUSBDevice* usbDevice = nullptr) : IScreen(usbDevice)
+    IMenu(UART* uart = nullptr) : IScreen(uart)
     {
     }
 };

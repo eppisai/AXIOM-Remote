@@ -7,8 +7,8 @@ static void LCDBrightnessMenuItemHandler(void* sender, CentralDB* db)
     // display->SetBacklight((uint8_t)menuitem->GetValue());
 }
 
-MainMenu::MainMenu(IUSBDevice* cdcDevice, CentralDB* centralDB) :
-    Menu(cdcDevice, centralDB),
+MainMenu::MainMenu(UART* uart, CentralDB* centralDB) :
+    Menu(uart, centralDB),
     _exitLinkMenuItem(ScreenLinkMenuItem(_db, "Exit Menu", AvailableScreens::MainPage, false))
 {
     // Added for testing - demo menu items

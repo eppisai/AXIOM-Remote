@@ -215,17 +215,32 @@ TEST_CASE("DrawIcon test")
     REQUIRE(check == true);
 }
 
-// TEST_CASE("SetActiveFramebuffer test")
-// {
-//     //ARRANGE
-//     PainterMod painter(frontFramebuffer, 5, 5);
+TEST_CASE("SetActiveFramebuffer test")
+{
+    //ARRANGE
+    bool checkSwap = true;
+    uint8_t framebufferUsed = 0;
+    uint16_t* framebuffer = SetupFramebuffer(5, 5);
+    PainterMod painter(framebuffer, 5, 5);
 
-//     //ACT
-//     painter.SetActiveFramebuffer(backFramebuffer);
+    //ACT
+    painter.SetActiveFramebuffer(frontFramebuffer);
+    for(uint8_t i = 0; i < 25; i++){
+        if(framebuffer[i] != frontFramebuffer[i]) {
+           checkSwap = false;
+        }
+    }
 
-//     //ASSERT
-//     painter.
+    painter.SetActiveFramebuffer(backFramebuffer);
+    for(uint8_t i = 0; i < 25; i++){
+        if(framebuffer[i] != backFramebuffer[i]) {
+           checkSwap = false;
+        }
+    }
 
-// }
+    //ASSERT
+    REQUIRE(checkSwap == true);
+
+}
 
 

@@ -24,7 +24,7 @@ class MenuSystem : public IMenuSystem
     // TODO: Length has to be adjusted manually, as currently we use static init to save space on the MCU
     IScreen* _availableScreens[4];
 
-    IUSBDevice* _usbDevice;
+    UART* _uart;
 
     // Menus, static init
     MainPage _mainPage;
@@ -35,7 +35,7 @@ class MenuSystem : public IMenuSystem
     void InitializeAvailableScreens();
 
   public:
-    explicit MenuSystem(IUSBDevice* usbDevice, CentralDB* centraldb);
+    explicit MenuSystem(UART* uart, CentralDB* centraldb);
     virtual ~MenuSystem();
     
     void SetCurrentScreen(AvailableScreens menu) override;

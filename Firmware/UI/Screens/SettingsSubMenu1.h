@@ -27,7 +27,7 @@ class SettingsSubMenu1 : public Menu
 
   public:
     // TODO: Add assignment of menu system to IMenu
-    explicit SettingsSubMenu1(IUSBDevice* cdcDevice, CentralDB* centraldb) : Menu(cdcDevice, centraldb)
+    explicit SettingsSubMenu1(UART* uart, CentralDB* centraldb) : Menu(uart, centraldb)
     {
 
         _label = "Menu";

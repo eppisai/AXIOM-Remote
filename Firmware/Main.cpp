@@ -558,7 +558,7 @@ int main()
 
     display.SetBacklight(50);
 
-    MenuSystem menuSystem(&cdcDevice, &centralDB);
+    MenuSystem menuSystem(&uart, &centralDB);
 
     Painter generalPainter(display.GetFramebuffer(), display.GetWidth(), display.GetHeight());
     IPainter* painter = &generalPainter;

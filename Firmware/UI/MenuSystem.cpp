@@ -4,9 +4,9 @@
 #include "Screens/IScreen.h"
 // #include <iostream>
 
-MenuSystem::MenuSystem(IUSBDevice* usbDevice, CentralDB* centraldb) :
-    _currentScreen(nullptr),_db(centraldb), _usbDevice(usbDevice), _mainPage(usbDevice), _MainMenu(usbDevice, centraldb),
-    _settingsSubMenu1(usbDevice, centraldb), _whiteBalance(usbDevice)
+MenuSystem::MenuSystem(UART* uart, CentralDB* centraldb) :
+    _currentScreen(nullptr),_db(centraldb), _uart(uart), _mainPage(uart), _MainMenu(uart, centraldb),
+    _settingsSubMenu1(uart, centraldb), _whiteBalance(uart)
 {
     InitializeAvailableScreens();
     SetCurrentScreen(AvailableScreens::MainPage);

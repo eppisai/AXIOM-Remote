@@ -4,12 +4,12 @@
 #include "../Widgets/NumericMenuItem.h"
 #include "../Widgets/ParameterListMenuItem.h"
 
-Menu::Menu(IUSBDevice* cdcDevice, CentralDB* centralDB) :
-    IMenu(cdcDevice), _menuItemsCount(0), _menuSelectionIndex(0), _maxVisibleItems(7), _popUpParameterMenu(10, 10),
-    _parameterListScreen(cdcDevice), _numericValueScreen(cdcDevice), _selectionButtonBeingPressed(false), _db(centralDB)
+Menu::Menu(UART* uart, CentralDB* centralDB) :
+    IMenu(uart), _menuItemsCount(0), _menuSelectionIndex(0), _maxVisibleItems(7), _popUpParameterMenu(10, 10),
+    _parameterListScreen(uart), _numericValueScreen(uart), _selectionButtonBeingPressed(false), _db(centralDB)
 {
-    // UNUSED(cdcDevice);
-    //_usbDevice = cdcDevice;
+    // UNUSED(uart);
+    //_usbDevice = uart;
 
     _label = "Menu";
     _menuBreadcrumbs = "Menu";

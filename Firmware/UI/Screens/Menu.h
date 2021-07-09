@@ -85,7 +85,7 @@ class Menu : public IMenu
 
   public:
     // TODO: Add assignment of menu system to IMenu
-    explicit Menu(IUSBDevice* cdcDevice, CentralDB* centralDB);
+    explicit Menu(UART* uart, CentralDB* centralDB);
 
     void AddMenuItem(MenuItem* newMenuItem);
     void SetMenuItem(uint8_t index, MenuItem* newMenuItem);

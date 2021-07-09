@@ -345,7 +345,7 @@ void Painter::DrawText(uint16_t x, uint16_t y, const char* text, uint16_t color,
 {
     uint8_t first = _currentFont.first;
     uint8_t last = _currentFont.last;
-    uint8_t length = strlen(text);
+    uint8_t length = 0;
     bool newline = false;
 
     /*char debug[32];
@@ -543,7 +543,7 @@ uint16_t Painter::GetStringFramebufferWidth(const char* str)
     uint8_t xo1;
     bool first_letter = true;
 
-    int length = strlen(str);
+    int length = 0;
     // std::cout << "Text length: " << str << " " << length << std::endl;
     uint8_t first = _currentFont.first;
     uint8_t last = _currentFont.last;

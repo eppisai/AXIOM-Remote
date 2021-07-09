@@ -100,7 +100,7 @@ class ImageButton : public IButton
 
             painter->DrawIcon(_image, _x + _imagePositionX, _y + _height / 2 - _image->Height / 2, _currentImageColor);
             painter->DrawText(_x + _textPositionX, _y + _textPositionY, _label, _currentTextColor,
-                              TextAlign::TEXT_ALIGN_LEFT, strlen(_label));
+                              TextAlign::TEXT_ALIGN_LEFT, 0);
         } else if (_buttonStyle == ButtonStyle::Icon)
         {
             painter->DrawIcon(_image, _x + _width / 2 - _image->Width / 2, _y + _height / 2 - _image->Height / 2,

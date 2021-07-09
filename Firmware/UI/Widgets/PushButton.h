@@ -50,7 +50,7 @@ class PushButton : public IButton
         painter->SetFont(Font::FreeSans12pt7b);
         uint8_t textPosY = _height / 2 + painter->GetCurrentFontHeight() / 2;
         painter->DrawText(_x + _width / 2, _y + textPosY, _label, _currentTextColor, TextAlign::TEXT_ALIGN_CENTER,
-                          strlen(_label));
+                          0);
     }
 
     void SetBackgroundColor(uint16_t color)

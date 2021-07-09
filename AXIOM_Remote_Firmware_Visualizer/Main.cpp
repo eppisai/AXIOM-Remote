@@ -23,6 +23,7 @@
 #include "UI/MenuSystem.h"
 #include "UI/Painter/Painter.h"
 #include "VirtualLCDDevice.h"
+#include "VirtualUART.h"
 
 // Debug
 #define DEBUG_DRAW
@@ -186,11 +187,12 @@ int main(int argc, char* argv[])
     painter.SetDebugOverlay(&debugPainter);
 #endif
 
-    USBCDCTerminalDevice cdcDevice;
+    // USBCDCTerminalDevice cdcDevice;
+    UART uart;
 
     CentralDB centralDB;
-
-    MenuSystem menuSystem(&cdcDevice, &centralDB);
+    
+    MenuSystem menuSystem(&uart, &centralDB);
 
     ButtonID button = ButtonID::BUTTON_NONE;
 

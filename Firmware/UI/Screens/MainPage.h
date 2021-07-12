@@ -25,8 +25,8 @@ class MainPage : public IMenu
     MainPageButton _shutterButton;
     MainPageButton _whiteBalanceButton;
 
-    IButton* _widgetArray[6] = {&_fpsButton,  &_analogGainButton, &_digitalGainButton,
-                                &_menuButton, &_shutterButton,    &_whiteBalanceButton};
+    IButton* _widgetArray[7] = {&_fpsButton,  &_analogGainButton, &_digitalGainButton,
+                                &_menuButton, &_shutterButton, &_whiteBalanceButton};
 
     Color565 _backgroundColor;
 

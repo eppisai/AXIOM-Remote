@@ -9,7 +9,8 @@ enum class AvailableScreens : uint8_t
     MainPage,
     MainMenu,
     SettingsSubMenu1,
-    WhiteBalance
+    WhiteBalance,
+    InputScreen
 };
 
 #endif // MENUDEFINITIONS_H

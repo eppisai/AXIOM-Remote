@@ -9,6 +9,7 @@
 #include "Screens/MainMenu.h"
 #include "Screens/SettingsSubMenu1.h"
 #include "Screens/WhiteBalanceScreen.h"
+#include "Screens/InputScreen.h"
 
 class Painter;
 class IScreen;
@@ -21,7 +22,7 @@ class MenuSystem : public IMenuSystem
     AvailableScreens _currentScreenType;
 
     // TODO: Length has to be adjusted manually, as currently we use static init to save space on the MCU
-    IScreen* _availableScreens[4];
+    IScreen* _availableScreens[5];
 
     IUSBDevice* _usbDevice;
 
@@ -30,6 +31,7 @@ class MenuSystem : public IMenuSystem
     MainMenu _MainMenu;
     SettingsSubMenu1 _settingsSubMenu1;
     WhiteBalanceScreen _whiteBalance;
+    InputScreen _inputScreen;
 
     void InitializeAvailableScreens();
 
